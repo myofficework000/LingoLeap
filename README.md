@@ -9,6 +9,10 @@ LingoLeap is a buildable Android starter for an Indian-language learning app ins
 - Hilt 2.60.1 with KSP (no kapt), ViewModel dependencies, Coroutines, Gson, and Glide Compose
 - Single activity, feature-first clean architecture and unidirectional MVI contracts
 
+
+
+<img width="1024" height="1536" alt="cab2c957-03ce-4e77-818a-4d1a2d548276" src="https://github.com/user-attachments/assets/444ad978-712b-46da-a297-674a12abaaca" />
+
 ```bash
 ./gradlew assembleDebug
 ```
