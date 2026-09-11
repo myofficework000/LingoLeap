@@ -1,0 +1,41 @@
+{
+  "languages": [
+    {"id":"en","name":"English","nativeName":"English","script":"Latin"},
+    {"id":"hi","name":"Hindi","nativeName":"हिन्दी","script":"Devanagari"},
+    {"id":"kn","name":"Kannada","nativeName":"ಕನ್ನಡ","script":"Kannada"},
+    {"id":"te","name":"Telugu","nativeName":"తెలుగు","script":"Telugu"},
+    {"id":"ta","name":"Tamil","nativeName":"தமிழ்","script":"Tamil"},
+    {"id":"ml","name":"Malayalam","nativeName":"മലയാളം","script":"Malayalam"},
+    {"id":"mr","name":"Marathi","nativeName":"मराठी","script":"Devanagari"},
+    {"id":"bn","name":"Bengali","nativeName":"বাংলা","script":"Bengali"},
+    {"id":"gu","name":"Gujarati","nativeName":"ગુજરાતી","script":"Gujarati"},
+    {"id":"pa","name":"Punjabi","nativeName":"ਪੰਜਾਬੀ","script":"Gurmukhi"},
+    {"id":"ur","name":"Urdu","nativeName":"اردو","script":"Perso-Arabic"},
+    {"id":"or","name":"Odia","nativeName":"ଓଡ଼ିଆ","script":"Odia"},
+    {"id":"as","name":"Assamese","nativeName":"অসমীয়া","script":"Bengali"},
+    {"id":"ne","name":"Nepali","nativeName":"नेपाली","script":"Devanagari"},
+    {"id":"sa","name":"Sanskrit","nativeName":"संस्कृतम्","script":"Devanagari"}
+  ],
+  "languagePairs": [
+    {"id":"en-hi","sourceLanguageId":"en","targetLanguageId":"hi"}, {"id":"hi-en","sourceLanguageId":"hi","targetLanguageId":"en"},
+    {"id":"en-kn","sourceLanguageId":"en","targetLanguageId":"kn"}, {"id":"kn-en","sourceLanguageId":"kn","targetLanguageId":"en"},
+    {"id":"en-te","sourceLanguageId":"en","targetLanguageId":"te"}, {"id":"te-en","sourceLanguageId":"te","targetLanguageId":"en"},
+    {"id":"en-ta","sourceLanguageId":"en","targetLanguageId":"ta"}, {"id":"ta-en","sourceLanguageId":"ta","targetLanguageId":"en"},
+    {"id":"en-ml","sourceLanguageId":"en","targetLanguageId":"ml"}, {"id":"ml-en","sourceLanguageId":"ml","targetLanguageId":"en"},
+    {"id":"en-mr","sourceLanguageId":"en","targetLanguageId":"mr"}, {"id":"mr-en","sourceLanguageId":"mr","targetLanguageId":"en"},
+    {"id":"en-bn","sourceLanguageId":"en","targetLanguageId":"bn"}, {"id":"bn-en","sourceLanguageId":"bn","targetLanguageId":"en"},
+    {"id":"en-gu","sourceLanguageId":"en","targetLanguageId":"gu"}, {"id":"gu-en","sourceLanguageId":"gu","targetLanguageId":"en"},
+    {"id":"en-pa","sourceLanguageId":"en","targetLanguageId":"pa"}, {"id":"pa-en","sourceLanguageId":"pa","targetLanguageId":"en"},
+    {"id":"en-ur","sourceLanguageId":"en","targetLanguageId":"ur"}, {"id":"ur-en","sourceLanguageId":"ur","targetLanguageId":"en"},
+    {"id":"en-or","sourceLanguageId":"en","targetLanguageId":"or"}, {"id":"or-en","sourceLanguageId":"or","targetLanguageId":"en"},
+    {"id":"en-as","sourceLanguageId":"en","targetLanguageId":"as"}, {"id":"as-en","sourceLanguageId":"as","targetLanguageId":"en"},
+    {"id":"en-ne","sourceLanguageId":"en","targetLanguageId":"ne"}, {"id":"ne-en","sourceLanguageId":"ne","targetLanguageId":"en"},
+    {"id":"en-sa","sourceLanguageId":"en","targetLanguageId":"sa"}, {"id":"sa-en","sourceLanguageId":"sa","targetLanguageId":"en"}
+  ],
+  "courses": [{"id":"course-en-hi","languagePairId":"en-hi","title":"English to Hindi: First Steps","lessons":[
+    {"id":"hi-basics","title":"Basic Words","order":1,"words":[{"id":"hi-hello","sourceText":"Hello","targetText":"नमस्ते","transliteration":"namaste"},{"id":"hi-thanks","sourceText":"Thank you","targetText":"धन्यवाद","transliteration":"dhanyavaad"}]},
+    {"id":"hi-common","title":"Common Phrases","order":2,"words":[{"id":"hi-how","sourceText":"How are you?","targetText":"आप कैसे हैं?","transliteration":"aap kaise hain"}]}
+  ]}],
+  "quizzes": [{"id":"quiz-hi-basics","lessonId":"hi-basics","prompt":"Choose the Hindi word for Hello","choices":["नमस्ते","धन्यवाद","पानी","किताब"],"correctAnswer":"नमस्ते"}],
+  "progress": {"activeCourseId":"course-en-hi","completedLessonIds":["hi-basics"],"streakDays":5,"xp":120}
+}
