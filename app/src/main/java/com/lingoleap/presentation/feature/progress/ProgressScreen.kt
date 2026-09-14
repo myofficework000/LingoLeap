@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,8 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.lingoleap.core.mvi.UiEvent
 import com.lingoleap.core.mvi.UiState
 import com.lingoleap.domain.model.LearnerProgress
-
-private val LingoGreen = Color(0xFF18B45B)
 
 enum class ProgressRange{
     WEEKLY,
@@ -117,9 +114,6 @@ sealed interface ProgressEvent : UiEvent {
             },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = LingoGreen
-            )
         ) {
             Text(
                 text = "View Achievements",
@@ -137,7 +131,7 @@ fun MotivationCard() {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFE9F9EF)
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         )
     ) {
 
@@ -152,7 +146,7 @@ fun MotivationCard() {
                 text = "“Great job!”",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = LingoGreen
+                color = MaterialTheme.colorScheme.primary
             )
 
             Spacer(
@@ -293,7 +287,7 @@ fun WeeklyXpChart(weeklyXp: List<Int>) {
                                 )
                             )
                             .background(
-                                LingoGreen
+                                MaterialTheme.colorScheme.primary
                             )
                     )
                     Spacer(
@@ -324,14 +318,14 @@ fun ProgressRangeSelector(selectedRange: ProgressRange, onRangeSelected: (Progre
 
             val backgroundColor =
                 if (isSelected) {
-                    LingoGreen
+                    MaterialTheme.colorScheme.primary
                 } else {
                     Color.Transparent
                 }
 
             val textColor =
                 if (isSelected) {
-                    Color.White
+                    MaterialTheme.colorScheme.surface
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
                 }

@@ -54,13 +54,17 @@ fun QuizRoute(
         viewModel.loadQuiz(lessonId)
     }
 
-    QuizScreen(state = state, onEvent = viewModel::onEvent)
+    QuizScreen(
+        state = state,
+        onEvent = { event -> if (event == QuizEvent.Next) onNext() else viewModel.onEvent(event) },
+    )
 }
 
 @Composable
 fun QuizScreen(state: QuizState = QuizState(), onEvent: (QuizEvent) -> Unit) {
 
     val quiz = state.quiz
+    val colors = MaterialTheme.colorScheme
 
     if (quiz == null) {
         Box(
@@ -88,17 +92,17 @@ fun QuizScreen(state: QuizState = QuizState(), onEvent: (QuizEvent) -> Unit) {
 
             val containerColor = when {
                 state.isAnswerChecked && isCorrectAnswer ->
-                    Color(0xFFD1FAE5)
+                    colors.primaryContainer
 
                 state.isAnswerChecked &&
                         isSelected ->
-                    Color(0xFFFEE2E2)
+                    colors.errorContainer
 
                 isSelected ->
-                    Color(0xFFE0F2FE)
+                    colors.secondaryContainer
 
                 else ->
-                    Color.White
+                    colors.surface
             }
 
             OutlinedButton(

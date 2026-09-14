@@ -6,6 +6,8 @@ import com.lingoleap.domain.usecase.GetLanguagePairsUseCase
 import com.lingoleap.domain.usecase.GetSupportedLanguagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,8 +33,11 @@ class LanguagePickerViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val languages = getSupportedLanguagesUseCase()
-            val pairs = getLanguagePairsUseCase()
+            val (languages, pairs) = coroutineScope {
+                val languages = async { getSupportedLanguagesUseCase() }
+                val pairs = async { getLanguagePairsUseCase() }
+                languages.await() to pairs.await()
+            }
 
             _state.update { currentState ->
                 currentState.copy(

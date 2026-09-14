@@ -38,8 +38,6 @@ import androidx.compose.ui.unit.dp
 import com.lingoleap.core.mvi.UiEvent
 import com.lingoleap.core.mvi.UiState
 
-private val LingoGreen = Color(0xFF18B45B)
-private val LogoutRed = Color(0xFFD94A4A)
 data class ProfileState(val displayName: String = "Learner", val selectedCourseCount: Int = 0) : UiState
 sealed interface ProfileEvent : UiEvent {
     data object OpenLanguages : ProfileEvent
@@ -170,8 +168,8 @@ fun ProfileContent(
         ProfileMenuItem(
             title = "Sign Out",
             icon = Icons.AutoMirrored.Filled.Logout,
-            iconColor = LogoutRed,
-            textColor = LogoutRed,
+            iconColor = MaterialTheme.colorScheme.error,
+            textColor = MaterialTheme.colorScheme.error,
             onClick = {
                 onEvent(ProfileEvent.SignOut)
             }
@@ -195,7 +193,7 @@ fun ProfileHeader(
             modifier = Modifier
                 .size(88.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFE6F7EC)),
+                .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center
         ) {
 
@@ -203,7 +201,7 @@ fun ProfileHeader(
                 imageVector = Icons.Default.Person,
                 contentDescription = "Profile",
                 modifier = Modifier.size(46.dp),
-                tint = LingoGreen
+                tint = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -234,7 +232,7 @@ fun ProfileHeader(
 fun ProfileMenuItem(
     title: String,
     icon: ImageVector,
-    iconColor: Color = Color(0xFF48627A),
+    iconColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     textColor: Color = MaterialTheme.colorScheme.onSurface,
     onClick: () -> Unit
 ) {

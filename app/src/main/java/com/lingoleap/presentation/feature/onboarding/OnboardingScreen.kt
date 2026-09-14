@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -129,7 +130,7 @@ fun OnboardingScreen(
         Text(
             text = currentPage.subtitle,
             fontSize = 16.sp,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
 
@@ -148,8 +149,8 @@ fun OnboardingScreen(
                         )
                         .clip(CircleShape)
                         .background(
-                            if (index == state.pageIndex) Color(0xFF22C55E)
-                            else Color(0xFFD1D5DB)
+                            if (index == state.pageIndex) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.outlineVariant
                         )
                 )
             }
@@ -169,9 +170,6 @@ fun OnboardingScreen(
                 .fillMaxWidth()
                 .height(52.dp),
             shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF22C55E)
-            )
         ) {
             Text(
                 text = if (state.pageIndex == onboardingPages.lastIndex) {

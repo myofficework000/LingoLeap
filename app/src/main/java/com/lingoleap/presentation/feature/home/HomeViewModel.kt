@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 data class HomeState(
@@ -37,9 +39,11 @@ class HomeViewModel @Inject constructor(
 
             try {
 
-                val courses = getCoursesUseCase()
-
-                val progress = getLearnerProgressUseCase()
+                val (courses, progress) = coroutineScope {
+                    val courses = async { getCoursesUseCase() }
+                    val progress = async { getLearnerProgressUseCase() }
+                    courses.await() to progress.await()
+                }
 
                 val activeCourse = courses.firstOrNull { course ->
                     course.id == progress.activeCourseId

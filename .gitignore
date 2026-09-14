@@ -1,6 +1,45 @@
+# Gradle files
 .gradle/
 build/
-app/build/
+*/build/
+
+# Local configuration
 local.properties
+
+# Android Studio / IntelliJ IDEA specific files
 .idea/
 *.iml
+*.ipr
+*.iws
+out/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Captures and logs
+captures/
+*.log
+
+# Keystore files
+*.jks
+*.keystore
+
+# External library source/doc
+lib/
+
+# Google Services configuration
+google-services.json
+
+# Kotlin specific
+.kotlin/
+kotlin-daemon-*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Local Codex task artifacts
+.artifacts/

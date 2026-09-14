@@ -16,11 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -89,7 +90,7 @@ fun LanguagePickerScreen(
 
         Text(
             text = "Select the language you want to learn.",
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -132,9 +133,6 @@ fun LanguagePickerScreen(
                 .fillMaxWidth()
                 .height(52.dp),
             shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF22C55E)
-            )
         ) {
             Text("Continue")
         }
@@ -153,7 +151,7 @@ fun LanguagePairCard(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = if (selected) Color(0xFF22C55E) else Color(0xFFE5E7EB),
+                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(16.dp)
             )
             .clickable { onClick() }
@@ -162,7 +160,7 @@ fun LanguagePairCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    if (selected) Color(0xFFF0FDF4) else Color.White
+                    if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
                 )
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -180,12 +178,12 @@ fun LanguagePairCard(
 
                 Text(
                     text = subtitle,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Icon(
-                imageVector = Icons.Outlined.KeyboardArrowRight,
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )

@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 
 data class LessonsListState(
     val course: Course? = null,
@@ -39,8 +41,11 @@ class LessonsListViewModel @Inject constructor(
 
             try {
 
-                val courses = getCoursesUseCase()
-                val progress = getLearnerProgressUseCase()
+                val (courses, progress) = coroutineScope {
+                    val courses = async { getCoursesUseCase() }
+                    val progress = async { getLearnerProgressUseCase() }
+                    courses.await() to progress.await()
+                }
 
                 val activeCourse = courses.firstOrNull {
                     it.id == progress.activeCourseId

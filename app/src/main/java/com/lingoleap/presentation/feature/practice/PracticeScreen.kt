@@ -156,9 +156,9 @@ fun WordMatchScreen(
                             .padding(vertical = 6.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = if (isSelected) {
-                                Color(0xFFE0F2FE)
+                                androidx.compose.material3.MaterialTheme.colorScheme.secondaryContainer
                             } else {
-                                Color.White
+                                androidx.compose.material3.MaterialTheme.colorScheme.surface
                             }
                         )
                     ) {
@@ -187,9 +187,9 @@ fun WordMatchScreen(
                                 .padding(vertical = 6.dp),
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = if (isSelected) {
-                                    Color(0xFFE0F2FE)
+                                androidx.compose.material3.MaterialTheme.colorScheme.secondaryContainer
                                 } else {
-                                    Color.White
+                                androidx.compose.material3.MaterialTheme.colorScheme.surface
                                 }
                             )
                         ) {
@@ -203,7 +203,7 @@ fun WordMatchScreen(
 
                 Text(
                     text = "Wrong match. Try again.",
-                    color = Color.Red
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.error
                 )
             }
 

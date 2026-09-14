@@ -1,6 +1,6 @@
 # LingoLeap — multilingual learning app starter
 
-LingoLeap is a buildable Android starter for an Indian-language learning app inspired by short, game-like learning loops. It deliberately supplies architecture, local data, navigation, MVI contracts, and empty Compose entry points—not finished UI or ViewModel logic—so four students can work independently without fighting over the same files.
+LingoLeap is a buildable Android app for short, game-like Indian-language learning loops. The prototype reference image below defines the intended journey and visual direction; the implementation uses Material 3 tokens rather than copied hard-coded screen colors.
 
 ## Stack
 
@@ -8,6 +8,7 @@ LingoLeap is a buildable Android starter for an Indian-language learning app ins
 - API 37 (`compileSdk` / `targetSdk`), Jetpack Compose BOM 2026.08.00, Material 3 and Navigation Compose
 - Hilt 2.60.1 with KSP (no kapt), ViewModel dependencies, Coroutines, Gson, and Glide Compose
 - Single activity, feature-first clean architecture and unidirectional MVI contracts
+- Central Material 3 light/dark color schemes: green primary actions, blue secondary selections, orange progress accents, and accessible error/surface tokens
 
 
 
@@ -16,6 +17,15 @@ LingoLeap is a buildable Android starter for an Indian-language learning app ins
 ```bash
 ./gradlew assembleDebug
 ```
+
+## What is working now
+
+- Hilt application, local JSON catalog, repository boundary, and use cases.
+- Onboarding → language selection → Home navigation with intermediate onboarding routes removed from the back stack.
+- Home, lessons list, lesson, quiz, practice, progress, profile, and achievements routes.
+- Four-tab bottom navigation for Home, Learn, Practice, and Profile; profile effects also route to language selection, statistics/progress, and achievements.
+- Lifecycle-aware `StateFlow` collection. Independent catalog reads load concurrently and disk JSON reads run on `Dispatchers.IO`.
+- One source of truth for primary/secondary/error/surface colors in `presentation/theme`.
 
 ## Architecture
 
@@ -42,9 +52,9 @@ app/src/main/java/com/lingoleap
 learning_catalog.json → LearningCatalogDataSource → LearningRepositoryImpl → use cases
 ```
 
-No ViewModel reducer, UI rendering, or remote backend is implemented on purpose. Each screen accepts immutable `State` and `onEvent`, and its feature file declares the event types and sub-composable signatures. Students can implement independently while preserving the contract.
+The local catalog is intentionally retained as a temporary backend. Feature ViewModels expose immutable state and events; persistence, audio playback, and authenticated profiles remain the next iteration.
 
-## ownership — first milestone
+## Completed ownership — milestone one
 
 | Student | Owns exactly these two screens | Primary files | Expected journey |
 |---------|---|---|---|
@@ -55,13 +65,21 @@ No ViewModel reducer, UI rendering, or remote backend is implemented on purpose.
 
 Each student should only edit their two feature folders plus tests. Shared changes to models, routes, dependency injection, or JSON should be proposed separately to avoid merge conflicts.
 
-## Delivery order
+## Next ownership — milestone two
 
-1. Implement each feature's `@HiltViewModel`: load its use case, reduce events into state, and expose one-off navigation/message effects.
-2. Implement the supplied screen and sub-composable signatures using Material 3.
-3. Wire real navigation only after Student A/B agree on language/course identifiers.
-4. Add completion writes to a local persistence layer (Room/DataStore) after the mock-data milestone.
-5. Add stretch screens: splash, lesson list, achievement gallery, and gamified path map.
+| Student | Two next features | Deliverable |
+|---|---|---|
+| Himaja | Splash/session restore, language preferences | Persist onboarding and selected language pair with DataStore; restore the correct start route. |
+| Sriteja | Lesson player, audio pronunciation | Add real word paging, progress saving, and an audio abstraction with accessibility labels. |
+| Tiru | Practice modes, quiz feedback | Complete listening/fill-blank modes, answer feedback effects, and unit tests for scoring. |
+| Dhyan | Achievements, gamified learning map | Implement the gallery and path-map UI backed by progress milestones. |
+
+## Recommended delivery order
+
+1. Add DataStore and completion/progress write use cases.
+2. Replace the temporary catalog with Room caching plus a remote learning API.
+3. Add audio, offline sync, error states, and accessibility/UI tests.
+4. Add authenticated profile, cloud progress sync, achievements, and the gamified map.
 
 ## Git handoff
 
