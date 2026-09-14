@@ -8,8 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lingoleap.presentation.feature.home.HomeScreen
+import com.lingoleap.presentation.feature.language.LanguagePickerRoute
 import com.lingoleap.presentation.feature.language.LanguagePickerScreen
 import com.lingoleap.presentation.feature.lesson.LessonScreen
+import com.lingoleap.presentation.feature.onboarding.OnboardingRoute
 import com.lingoleap.presentation.feature.onboarding.OnboardingScreen
 import com.lingoleap.presentation.feature.practice.PracticeScreen
 import com.lingoleap.presentation.feature.profile.ProfileScreen
@@ -30,8 +32,18 @@ class MainActivity : ComponentActivity() {
 private fun LingoLeapApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = LingoRoute.Onboarding.path) {
-        composable(LingoRoute.Onboarding.path) { OnboardingScreen(onEvent = {}) }
-        composable(LingoRoute.LanguagePicker.path) { LanguagePickerScreen(onEvent = {}) }
+        composable(LingoRoute.Onboarding.path) {
+            OnboardingRoute(onFinished = {
+                navController.navigate(LingoRoute.LanguagePicker.path)
+            })
+        }
+        composable(LingoRoute.LanguagePicker.path) {
+            LanguagePickerRoute(
+                onConfirmed = {
+                    navController.navigate(LingoRoute.Home.path)
+                }
+            )
+        }
         composable(LingoRoute.Home.path) { HomeScreen(onEvent = {}) }
         composable(LingoRoute.Lesson.path) { LessonScreen(onEvent = {}) }
         composable(LingoRoute.Quiz.path) { QuizScreen(onEvent = {}) }
