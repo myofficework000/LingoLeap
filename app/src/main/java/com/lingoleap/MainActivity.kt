@@ -16,11 +16,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.lingoleap.presentation.feature.home.HomeScreen
 import com.lingoleap.presentation.feature.language.LanguagePickerRoute
-import com.lingoleap.presentation.feature.lesson.LessonEvent
-import com.lingoleap.presentation.feature.lesson.LessonScreen
+import com.lingoleap.presentation.feature.lesson.LessonRoute
 import com.lingoleap.presentation.feature.lesson.LessonsListScreen
 import com.lingoleap.presentation.feature.onboarding.OnboardingRoute
 import com.lingoleap.presentation.feature.practice.PracticeRoute
+import com.lingoleap.presentation.feature.splash.SplashRoute
 import com.lingoleap.presentation.feature.profile.ProfileEffect
 import com.lingoleap.presentation.feature.profile.ProfileScreen
 import com.lingoleap.presentation.feature.profile.ProfileViewModel
@@ -51,7 +51,10 @@ private fun LingoLeapApp() {
     )
 
     Scaffold(bottomBar = { if (showBottomBar) LingoBottomBar(navController) }) { padding ->
-        NavHost(navController, LingoRoute.Onboarding.path, androidx.compose.ui.Modifier.padding(padding)) {
+        NavHost(navController, LingoRoute.Splash.path, androidx.compose.ui.Modifier.padding(padding)) {
+            composable(LingoRoute.Splash.path) {
+                SplashRoute(onNavigate = { route -> navController.navigate(route) { popUpTo(LingoRoute.Splash.path) { inclusive = true } } })
+            }
             composable(LingoRoute.Onboarding.path) {
                 OnboardingRoute(onFinished = {
                     navController.navigate(LingoRoute.LanguagePicker.path) { popUpTo(LingoRoute.Onboarding.path) { inclusive = true } }
@@ -77,9 +80,7 @@ private fun LingoLeapApp() {
             }
             composable(LingoRoute.Lesson.path) { backStackEntry ->
                 val lessonId = backStackEntry.arguments?.getString("lessonId") ?: return@composable
-                LessonScreen(onEvent = { event ->
-                    if (event == LessonEvent.Finish) navController.navigate(LingoRoute.Quiz.create(lessonId))
-                })
+                LessonRoute(lessonId = lessonId, onCompleted = { navController.navigate(LingoRoute.Quiz.create(lessonId)) })
             }
             composable(LingoRoute.Quiz.path) { backStackEntry ->
                 val lessonId = backStackEntry.arguments?.getString("lessonId") ?: return@composable

@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,16 +57,13 @@ fun LanguagePickerRoute(
     viewModel: LanguagePickerViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(viewModel) {
+        viewModel.effect.collect { if (it is LanguagePickerEffect.Confirmed) onConfirmed() }
+    }
 
     LanguagePickerScreen(
         state = state,
-        onEvent = { event ->
-            if (event is LanguagePickerEvent.Confirm) {
-                onConfirmed()
-            } else {
-                viewModel.onEvent(event)
-            }
-        }
+        onEvent = viewModel::onEvent,
     )
 }
 

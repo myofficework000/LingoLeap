@@ -26,6 +26,7 @@ LingoLeap is a buildable Android app for short, game-like Indian-language learni
 - Four-tab bottom navigation for Home, Learn, Practice, and Profile; profile effects also route to language selection, statistics/progress, and achievements.
 - Lifecycle-aware `StateFlow` collection. Independent catalog reads load concurrently and disk JSON reads run on `Dispatchers.IO`.
 - One source of truth for primary/secondary/error/surface colors in `presentation/theme`.
+- Phase 2 foundations: DataStore session/language preferences, Room-backed learner progress, a platform-neutral pronunciation player, lesson completion persistence, achievement rules, and learning-path state derivation.
 
 ## Architecture
 

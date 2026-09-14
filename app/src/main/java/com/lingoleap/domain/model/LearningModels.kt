@@ -37,3 +37,20 @@ data class LearnerProgress(
     val streakDays: Int,
     val xp: Int
 )
+
+data class UserPreferences(
+    val hasCompletedOnboarding: Boolean = false,
+    val sourceLanguageId: String? = null,
+    val targetLanguageId: String? = null,
+    val activeLanguagePairId: String? = null,
+)
+
+data class Achievement(
+    val id: String,
+    val title: String,
+    val description: String,
+    val isUnlocked: Boolean,
+)
+
+enum class LearningPathNodeState { COMPLETED, CURRENT, LOCKED }
+data class LearningPathNode(val lesson: Lesson, val state: LearningPathNodeState)

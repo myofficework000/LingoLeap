@@ -42,6 +42,10 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
     implementation("com.google.code.gson:gson:2.13.2")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
+    implementation("androidx.room:room-runtime:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    ksp("androidx.room:room-compiler:2.8.4")
 
     implementation("androidx.compose.material:material-icons-extended")
 

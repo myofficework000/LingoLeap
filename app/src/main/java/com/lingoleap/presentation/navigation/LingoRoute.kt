@@ -1,6 +1,7 @@
 package com.lingoleap.presentation.navigation
 
 sealed class LingoRoute(val path: String) {
+    data object Splash : LingoRoute("splash")
     data object Onboarding : LingoRoute("onboarding")
     data object LanguagePicker : LingoRoute("language_picker")
     data object Home : LingoRoute("home")

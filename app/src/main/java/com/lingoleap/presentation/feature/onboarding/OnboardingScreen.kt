@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -74,6 +75,7 @@ fun OnboardingRoute(
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(viewModel) { viewModel.effect.collect { if (it is OnboardingEffect.Finished) onFinished() } }
 
     OnboardingScreen(
         state = state,
@@ -102,7 +104,7 @@ fun OnboardingScreen(
             horizontalArrangement = Arrangement.End
         ) {
             TextButton(
-                onClick = onFinished
+                onClick = { onEvent(OnboardingEvent.Skip) }
             ) {
                 Text("Skip")
             }
@@ -163,7 +165,7 @@ fun OnboardingScreen(
                 if (state.pageIndex < onboardingPages.lastIndex) {
                     onEvent(OnboardingEvent.Continue)
                 } else {
-                    onFinished()
+                    onEvent(OnboardingEvent.Skip)
                 }
             },
             modifier = Modifier
