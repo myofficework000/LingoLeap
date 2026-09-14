@@ -44,7 +44,7 @@ private fun LingoLeapApp() {
                 }
             )
         }
-        composable(LingoRoute.Home.path) { HomeScreen(onEvent = {}) }
+        composable(LingoRoute.Home.path) { HomeScreen() }
         composable(LingoRoute.Lesson.path) { LessonScreen(onEvent = {}) }
         composable(LingoRoute.Quiz.path) { QuizScreen(onEvent = {}) }
         composable(LingoRoute.Practice.path) { PracticeScreen(onEvent = {}) }
