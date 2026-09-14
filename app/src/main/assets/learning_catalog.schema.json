@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LingoLeap learning catalog",
+  "description": "Authoring contract for the local mock curriculum. One regional curriculum generates both English-to-regional and regional-to-English courses.",
+  "type": "object",
+  "required": ["catalogVersion", "languages", "languagePairs", "curricula", "progress"],
+  "properties": {
+    "catalogVersion": {"type": "string"},
+    "defaultLanguagePairId": {"type": "string"},
+    "languages": {"type": "array", "minItems": 2},
+    "languagePairs": {"type": "array", "minItems": 2},
+    "curricula": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["languageId", "lessons"],
+        "properties": {
+          "languageId": {"type": "string"},
+          "lessons": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["key", "title", "titleNative", "words"],
+              "properties": {
+                "key": {"type": "string"},
+                "title": {"type": "string"},
+                "titleNative": {"type": "string"},
+                "words": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "object",
+                    "required": ["english", "native"],
+                    "properties": {
+                      "english": {"type": "string"},
+                      "native": {"type": "string"},
+                      "transliteration": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,6 @@
 {
+  "catalogVersion": "2.0.0",
+  "defaultLanguagePairId": "en-hi",
   "languages": [
     {"id":"en","name":"English","nativeName":"English","script":"Latin"},
     {"id":"hi","name":"Hindi","nativeName":"हिन्दी","script":"Devanagari"},
@@ -17,25 +19,92 @@
     {"id":"sa","name":"Sanskrit","nativeName":"संस्कृतम्","script":"Devanagari"}
   ],
   "languagePairs": [
-    {"id":"en-hi","sourceLanguageId":"en","targetLanguageId":"hi"}, {"id":"hi-en","sourceLanguageId":"hi","targetLanguageId":"en"},
-    {"id":"en-kn","sourceLanguageId":"en","targetLanguageId":"kn"}, {"id":"kn-en","sourceLanguageId":"kn","targetLanguageId":"en"},
-    {"id":"en-te","sourceLanguageId":"en","targetLanguageId":"te"}, {"id":"te-en","sourceLanguageId":"te","targetLanguageId":"en"},
-    {"id":"en-ta","sourceLanguageId":"en","targetLanguageId":"ta"}, {"id":"ta-en","sourceLanguageId":"ta","targetLanguageId":"en"},
-    {"id":"en-ml","sourceLanguageId":"en","targetLanguageId":"ml"}, {"id":"ml-en","sourceLanguageId":"ml","targetLanguageId":"en"},
-    {"id":"en-mr","sourceLanguageId":"en","targetLanguageId":"mr"}, {"id":"mr-en","sourceLanguageId":"mr","targetLanguageId":"en"},
-    {"id":"en-bn","sourceLanguageId":"en","targetLanguageId":"bn"}, {"id":"bn-en","sourceLanguageId":"bn","targetLanguageId":"en"},
-    {"id":"en-gu","sourceLanguageId":"en","targetLanguageId":"gu"}, {"id":"gu-en","sourceLanguageId":"gu","targetLanguageId":"en"},
-    {"id":"en-pa","sourceLanguageId":"en","targetLanguageId":"pa"}, {"id":"pa-en","sourceLanguageId":"pa","targetLanguageId":"en"},
-    {"id":"en-ur","sourceLanguageId":"en","targetLanguageId":"ur"}, {"id":"ur-en","sourceLanguageId":"ur","targetLanguageId":"en"},
-    {"id":"en-or","sourceLanguageId":"en","targetLanguageId":"or"}, {"id":"or-en","sourceLanguageId":"or","targetLanguageId":"en"},
-    {"id":"en-as","sourceLanguageId":"en","targetLanguageId":"as"}, {"id":"as-en","sourceLanguageId":"as","targetLanguageId":"en"},
-    {"id":"en-ne","sourceLanguageId":"en","targetLanguageId":"ne"}, {"id":"ne-en","sourceLanguageId":"ne","targetLanguageId":"en"},
-    {"id":"en-sa","sourceLanguageId":"en","targetLanguageId":"sa"}, {"id":"sa-en","sourceLanguageId":"sa","targetLanguageId":"en"}
+    {"id":"en-hi","sourceLanguageId":"en","targetLanguageId":"hi"},{"id":"hi-en","sourceLanguageId":"hi","targetLanguageId":"en"},
+    {"id":"en-kn","sourceLanguageId":"en","targetLanguageId":"kn"},{"id":"kn-en","sourceLanguageId":"kn","targetLanguageId":"en"},
+    {"id":"en-te","sourceLanguageId":"en","targetLanguageId":"te"},{"id":"te-en","sourceLanguageId":"te","targetLanguageId":"en"},
+    {"id":"en-ta","sourceLanguageId":"en","targetLanguageId":"ta"},{"id":"ta-en","sourceLanguageId":"ta","targetLanguageId":"en"},
+    {"id":"en-ml","sourceLanguageId":"en","targetLanguageId":"ml"},{"id":"ml-en","sourceLanguageId":"ml","targetLanguageId":"en"},
+    {"id":"en-mr","sourceLanguageId":"en","targetLanguageId":"mr"},{"id":"mr-en","sourceLanguageId":"mr","targetLanguageId":"en"},
+    {"id":"en-bn","sourceLanguageId":"en","targetLanguageId":"bn"},{"id":"bn-en","sourceLanguageId":"bn","targetLanguageId":"en"},
+    {"id":"en-gu","sourceLanguageId":"en","targetLanguageId":"gu"},{"id":"gu-en","sourceLanguageId":"gu","targetLanguageId":"en"},
+    {"id":"en-pa","sourceLanguageId":"en","targetLanguageId":"pa"},{"id":"pa-en","sourceLanguageId":"pa","targetLanguageId":"en"},
+    {"id":"en-ur","sourceLanguageId":"en","targetLanguageId":"ur"},{"id":"ur-en","sourceLanguageId":"ur","targetLanguageId":"en"},
+    {"id":"en-or","sourceLanguageId":"en","targetLanguageId":"or"},{"id":"or-en","sourceLanguageId":"or","targetLanguageId":"en"},
+    {"id":"en-as","sourceLanguageId":"en","targetLanguageId":"as"},{"id":"as-en","sourceLanguageId":"as","targetLanguageId":"en"},
+    {"id":"en-ne","sourceLanguageId":"en","targetLanguageId":"ne"},{"id":"ne-en","sourceLanguageId":"ne","targetLanguageId":"en"},
+    {"id":"en-sa","sourceLanguageId":"en","targetLanguageId":"sa"},{"id":"sa-en","sourceLanguageId":"sa","targetLanguageId":"en"}
   ],
-  "courses": [{"id":"course-en-hi","languagePairId":"en-hi","title":"English to Hindi: First Steps","lessons":[
-    {"id":"hi-basics","title":"Basic Words","order":1,"words":[{"id":"hi-hello","sourceText":"Hello","targetText":"नमस्ते","transliteration":"namaste"},{"id":"hi-thanks","sourceText":"Thank you","targetText":"धन्यवाद","transliteration":"dhanyavaad"}]},
-    {"id":"hi-common","title":"Common Phrases","order":2,"words":[{"id":"hi-how","sourceText":"How are you?","targetText":"आप कैसे हैं?","transliteration":"aap kaise hain"}]}
-  ]}],
-  "quizzes": [{"id":"quiz-hi-basics","lessonId":"hi-basics","prompt":"Choose the Hindi word for Hello","choices":["नमस्ते","धन्यवाद","पानी","किताब"],"correctAnswer":"नमस्ते"}],
-  "progress": {"activeCourseId":"course-en-hi","completedLessonIds":["hi-basics"],"streakDays":5,"xp":120}
+  "curricula": [
+    {"languageId":"hi","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"अभिवादन","words":[{"english":"Hello","native":"नमस्ते","transliteration":"namaste"},{"english":"Thank you","native":"धन्यवाद","transliteration":"dhanyavaad"},{"english":"Yes","native":"हाँ","transliteration":"haan"},{"english":"No","native":"नहीं","transliteration":"nahin"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"रोज़मर्रा के शब्द","words":[{"english":"Water","native":"पानी","transliteration":"paani"},{"english":"Food","native":"खाना","transliteration":"khaana"},{"english":"Book","native":"किताब","transliteration":"kitaab"},{"english":"Home","native":"घर","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"लोग और विनम्र वाक्य","words":[{"english":"I","native":"मैं","transliteration":"main"},{"english":"You","native":"आप","transliteration":"aap"},{"english":"Friend","native":"दोस्त","transliteration":"dost"},{"english":"Please","native":"कृपया","transliteration":"kripaya"}]}
+    ]},
+    {"languageId":"kn","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"ಶುಭಾಶಯಗಳು","words":[{"english":"Hello","native":"ನಮಸ್ಕಾರ","transliteration":"namaskara"},{"english":"Thank you","native":"ಧನ್ಯವಾದ","transliteration":"dhanyavaada"},{"english":"Yes","native":"ಹೌದು","transliteration":"haudu"},{"english":"No","native":"ಇಲ್ಲ","transliteration":"illa"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"ದಿನನಿತ್ಯದ ಪದಗಳು","words":[{"english":"Water","native":"ನೀರು","transliteration":"neeru"},{"english":"Food","native":"ಊಟ","transliteration":"oota"},{"english":"Book","native":"ಪುಸ್ತಕ","transliteration":"pustaka"},{"english":"Home","native":"ಮನೆ","transliteration":"mane"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"ಜನರು ಮತ್ತು ಸೌಜನ್ಯದ ನುಡಿಗಳು","words":[{"english":"I","native":"ನಾನು","transliteration":"naanu"},{"english":"You","native":"ನೀವು","transliteration":"neevu"},{"english":"Friend","native":"ಸ್ನೇಹಿತ","transliteration":"snehita"},{"english":"Please","native":"ದಯವಿಟ್ಟು","transliteration":"dayavittu"}]}
+    ]},
+    {"languageId":"te","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"అభివాదాలు","words":[{"english":"Hello","native":"నమస్కారం","transliteration":"namaskaaram"},{"english":"Thank you","native":"ధన్యవాదాలు","transliteration":"dhanyavaadaalu"},{"english":"Yes","native":"అవును","transliteration":"avunu"},{"english":"No","native":"కాదు","transliteration":"kaadu"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"రోజువారీ పదాలు","words":[{"english":"Water","native":"నీరు","transliteration":"neeru"},{"english":"Food","native":"ఆహారం","transliteration":"aahaaram"},{"english":"Book","native":"పుస్తకం","transliteration":"pustakam"},{"english":"Home","native":"ఇల్లు","transliteration":"illu"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"వ్యక్తులు మరియు మర్యాదపూర్వక పదాలు","words":[{"english":"I","native":"నేను","transliteration":"nenu"},{"english":"You","native":"మీరు","transliteration":"meeru"},{"english":"Friend","native":"స్నేహితుడు","transliteration":"snehitudu"},{"english":"Please","native":"దయచేసి","transliteration":"dayachesi"}]}
+    ]},
+    {"languageId":"ta","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"வாழ்த்துகள்","words":[{"english":"Hello","native":"வணக்கம்","transliteration":"vanakkam"},{"english":"Thank you","native":"நன்றி","transliteration":"nandri"},{"english":"Yes","native":"ஆம்","transliteration":"aam"},{"english":"No","native":"இல்லை","transliteration":"illai"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"அன்றாடச் சொற்கள்","words":[{"english":"Water","native":"தண்ணீர்","transliteration":"thanneer"},{"english":"Food","native":"உணவு","transliteration":"unavu"},{"english":"Book","native":"புத்தகம்","transliteration":"puthagam"},{"english":"Home","native":"வீடு","transliteration":"veedu"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"மக்கள் மற்றும் மரியாதைச் சொற்கள்","words":[{"english":"I","native":"நான்","transliteration":"naan"},{"english":"You","native":"நீங்கள்","transliteration":"neengal"},{"english":"Friend","native":"நண்பர்","transliteration":"nanbar"},{"english":"Please","native":"தயவுசெய்து","transliteration":"dayavuseythu"}]}
+    ]},
+    {"languageId":"ml","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"അഭിവാദ്യങ്ങൾ","words":[{"english":"Hello","native":"നമസ്കാരം","transliteration":"namaskaaram"},{"english":"Thank you","native":"നന്ദി","transliteration":"nandi"},{"english":"Yes","native":"അതെ","transliteration":"athe"},{"english":"No","native":"ഇല്ല","transliteration":"illa"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"ദൈനംദിന വാക്കുകൾ","words":[{"english":"Water","native":"വെള്ളം","transliteration":"vellam"},{"english":"Food","native":"ഭക്ഷണം","transliteration":"bhakshanam"},{"english":"Book","native":"പുസ്തകം","transliteration":"pustakam"},{"english":"Home","native":"വീട്","transliteration":"veedu"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"ആളുകളും മര്യാദയുള്ള വാക്കുകളും","words":[{"english":"I","native":"ഞാൻ","transliteration":"njaan"},{"english":"You","native":"നിങ്ങൾ","transliteration":"ningal"},{"english":"Friend","native":"സുഹൃത്ത്","transliteration":"suhruth"},{"english":"Please","native":"ദയവായി","transliteration":"dayavaayi"}]}
+    ]},
+    {"languageId":"mr","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"अभिवादन","words":[{"english":"Hello","native":"नमस्कार","transliteration":"namaskaar"},{"english":"Thank you","native":"धन्यवाद","transliteration":"dhanyavaad"},{"english":"Yes","native":"होय","transliteration":"hoy"},{"english":"No","native":"नाही","transliteration":"naahi"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"दैनंदिन शब्द","words":[{"english":"Water","native":"पाणी","transliteration":"paani"},{"english":"Food","native":"जेवण","transliteration":"jevan"},{"english":"Book","native":"पुस्तक","transliteration":"pustak"},{"english":"Home","native":"घर","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"लोक आणि नम्र शब्द","words":[{"english":"I","native":"मी","transliteration":"mi"},{"english":"You","native":"तुम्ही","transliteration":"tumhi"},{"english":"Friend","native":"मित्र","transliteration":"mitra"},{"english":"Please","native":"कृपया","transliteration":"krupaya"}]}
+    ]},
+    {"languageId":"bn","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"অভিবাদন","words":[{"english":"Hello","native":"নমস্কার","transliteration":"nomoshkar"},{"english":"Thank you","native":"ধন্যবাদ","transliteration":"dhonnobad"},{"english":"Yes","native":"হ্যাঁ","transliteration":"hyaan"},{"english":"No","native":"না","transliteration":"na"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"প্রতিদিনের শব্দ","words":[{"english":"Water","native":"জল","transliteration":"jol"},{"english":"Food","native":"খাবার","transliteration":"khabar"},{"english":"Book","native":"বই","transliteration":"boi"},{"english":"Home","native":"বাড়ি","transliteration":"bari"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"মানুষ এবং ভদ্র শব্দ","words":[{"english":"I","native":"আমি","transliteration":"ami"},{"english":"You","native":"আপনি","transliteration":"apni"},{"english":"Friend","native":"বন্ধু","transliteration":"bondhu"},{"english":"Please","native":"দয়া করে","transliteration":"doya kore"}]}
+    ]},
+    {"languageId":"gu","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"અભિવાદન","words":[{"english":"Hello","native":"નમસ્તે","transliteration":"namaste"},{"english":"Thank you","native":"આભાર","transliteration":"aabhar"},{"english":"Yes","native":"હા","transliteration":"haa"},{"english":"No","native":"ના","transliteration":"naa"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"રોજિંદા શબ્દો","words":[{"english":"Water","native":"પાણી","transliteration":"paani"},{"english":"Food","native":"ખોરાક","transliteration":"khoraak"},{"english":"Book","native":"પુસ્તક","transliteration":"pustak"},{"english":"Home","native":"ઘર","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"લોકો અને વિનમ્ર શબ્દો","words":[{"english":"I","native":"હું","transliteration":"hun"},{"english":"You","native":"તમે","transliteration":"tame"},{"english":"Friend","native":"મિત્ર","transliteration":"mitra"},{"english":"Please","native":"કૃપા કરીને","transliteration":"krupa karine"}]}
+    ]},
+    {"languageId":"pa","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"ਸਤਿਕਾਰ","words":[{"english":"Hello","native":"ਸਤ ਸ੍ਰੀ ਅਕਾਲ","transliteration":"sat sri akaal"},{"english":"Thank you","native":"ਧੰਨਵਾਦ","transliteration":"dhannavaad"},{"english":"Yes","native":"ਹਾਂ","transliteration":"haan"},{"english":"No","native":"ਨਹੀਂ","transliteration":"nahin"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"ਰੋਜ਼ਾਨਾ ਦੇ ਸ਼ਬਦ","words":[{"english":"Water","native":"ਪਾਣੀ","transliteration":"paani"},{"english":"Food","native":"ਖਾਣਾ","transliteration":"khaana"},{"english":"Book","native":"ਕਿਤਾਬ","transliteration":"kitaab"},{"english":"Home","native":"ਘਰ","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"ਲੋਕ ਅਤੇ ਨਿਮਰ ਸ਼ਬਦ","words":[{"english":"I","native":"ਮੈਂ","transliteration":"main"},{"english":"You","native":"ਤੁਸੀਂ","transliteration":"tusin"},{"english":"Friend","native":"ਦੋਸਤ","transliteration":"dost"},{"english":"Please","native":"ਕਿਰਪਾ ਕਰਕੇ","transliteration":"kirpa karke"}]}
+    ]},
+    {"languageId":"ur","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"سلام","words":[{"english":"Hello","native":"السلام علیکم","transliteration":"assalaam alaikum"},{"english":"Thank you","native":"شکریہ","transliteration":"shukriya"},{"english":"Yes","native":"ہاں","transliteration":"haan"},{"english":"No","native":"نہیں","transliteration":"nahin"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"روزمرہ کے الفاظ","words":[{"english":"Water","native":"پانی","transliteration":"paani"},{"english":"Food","native":"کھانا","transliteration":"khaana"},{"english":"Book","native":"کتاب","transliteration":"kitaab"},{"english":"Home","native":"گھر","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"لوگ اور شائستہ الفاظ","words":[{"english":"I","native":"میں","transliteration":"main"},{"english":"You","native":"آپ","transliteration":"aap"},{"english":"Friend","native":"دوست","transliteration":"dost"},{"english":"Please","native":"براہ کرم","transliteration":"barae karam"}]}
+    ]},
+    {"languageId":"or","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"ଅଭିବାଦନ","words":[{"english":"Hello","native":"ନମସ୍କାର","transliteration":"namaskaar"},{"english":"Thank you","native":"ଧନ୍ୟବାଦ","transliteration":"dhanyabaad"},{"english":"Yes","native":"ହଁ","transliteration":"han"},{"english":"No","native":"ନା","transliteration":"naa"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"ଦୈନନ୍ଦିନ ଶବ୍ଦ","words":[{"english":"Water","native":"ପାଣି","transliteration":"paani"},{"english":"Food","native":"ଖାଦ୍ୟ","transliteration":"khaadya"},{"english":"Book","native":"ବହି","transliteration":"bahi"},{"english":"Home","native":"ଘର","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"ଲୋକ ଏବଂ ଭଦ୍ର ଶବ୍ଦ","words":[{"english":"I","native":"ମୁଁ","transliteration":"mun"},{"english":"You","native":"ଆପଣ","transliteration":"aapana"},{"english":"Friend","native":"ବନ୍ଧୁ","transliteration":"bandhu"},{"english":"Please","native":"ଦୟାକରି","transliteration":"dayakari"}]}
+    ]},
+    {"languageId":"as","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"অভিবাদন","words":[{"english":"Hello","native":"নমস্কাৰ","transliteration":"nomoskar"},{"english":"Thank you","native":"ধন্যবাদ","transliteration":"dhonyobaad"},{"english":"Yes","native":"হয়","transliteration":"hoy"},{"english":"No","native":"নহয়","transliteration":"nohoi"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"দৈনন্দিন শব্দ","words":[{"english":"Water","native":"পানী","transliteration":"paani"},{"english":"Food","native":"খাদ্য","transliteration":"khadya"},{"english":"Book","native":"কিতাপ","transliteration":"kitaap"},{"english":"Home","native":"ঘৰ","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"মানুহ আৰু ভদ্ৰ শব্দ","words":[{"english":"I","native":"মই","transliteration":"moi"},{"english":"You","native":"আপুনি","transliteration":"apuni"},{"english":"Friend","native":"বন্ধু","transliteration":"bondhu"},{"english":"Please","native":"অনুগ্ৰহ কৰি","transliteration":"anugraha kori"}]}
+    ]},
+    {"languageId":"ne","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"अभिवादन","words":[{"english":"Hello","native":"नमस्ते","transliteration":"namaste"},{"english":"Thank you","native":"धन्यवाद","transliteration":"dhanyabaad"},{"english":"Yes","native":"हो","transliteration":"ho"},{"english":"No","native":"होइन","transliteration":"hoina"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"दैनिक शब्दहरू","words":[{"english":"Water","native":"पानी","transliteration":"paani"},{"english":"Food","native":"खाना","transliteration":"khaana"},{"english":"Book","native":"किताब","transliteration":"kitaab"},{"english":"Home","native":"घर","transliteration":"ghar"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"मानिस र नम्र शब्दहरू","words":[{"english":"I","native":"म","transliteration":"ma"},{"english":"You","native":"तपाईं","transliteration":"tapain"},{"english":"Friend","native":"साथी","transliteration":"saathi"},{"english":"Please","native":"कृपया","transliteration":"kripaya"}]}
+    ]},
+    {"languageId":"sa","lessons":[
+      {"key":"greetings","title":"Greetings","titleNative":"अभिवादनम्","words":[{"english":"Hello","native":"नमस्ते","transliteration":"namaste"},{"english":"Thank you","native":"धन्यवादः","transliteration":"dhanyavaadah"},{"english":"Yes","native":"आम्","transliteration":"aam"},{"english":"No","native":"न","transliteration":"na"}]},
+      {"key":"everyday","title":"Everyday words","titleNative":"दैनिकशब्दाः","words":[{"english":"Water","native":"जलम्","transliteration":"jalam"},{"english":"Food","native":"भोजनम्","transliteration":"bhojanam"},{"english":"Book","native":"पुस्तकम्","transliteration":"pustakam"},{"english":"Home","native":"गृहम्","transliteration":"griham"}]},
+      {"key":"people","title":"People and polite phrases","titleNative":"जनाः विनयशब्दाश्च","words":[{"english":"I","native":"अहम्","transliteration":"aham"},{"english":"You","native":"भवान्","transliteration":"bhavaan"},{"english":"Friend","native":"मित्रम्","transliteration":"mitram"},{"english":"Please","native":"कृपया","transliteration":"kripaya"}]}
+    ]}
+  ],
+  "progress": {"activeCourseId":"course-en-hi","completedLessonIds":["en-hi-greetings"],"streakDays":5,"xp":120}
 }

@@ -47,7 +47,7 @@ app/src/main/java/com/lingoleap
     └── theme
 ```
 
-`assets/learning_catalog.json` is the temporary backend. It already contains 15 Indian languages and bidirectional English pair examples, course/lesson/vocabulary/quiz/progress sample data. The flow is fully implemented:
+`assets/learning_catalog.json` is the temporary backend. Catalog v2 contains English plus 14 regional-language curricula, 28 bidirectional English language pairs, 84 generated beginner lessons, 168 vocabulary entries, deterministic quiz data, and sample progress. A single regional curriculum generates both directions, so translations do not drift between English → regional and regional → English courses. `assets/learning_catalog.schema.json` documents the authoring contract for future content additions. The flow is fully implemented:
 
 ```text
 learning_catalog.json → LearningCatalogDataSource → LearningRepositoryImpl → use cases
