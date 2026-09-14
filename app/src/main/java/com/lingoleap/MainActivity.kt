@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,13 +19,18 @@ import com.lingoleap.presentation.feature.onboarding.OnboardingRoute
 import com.lingoleap.presentation.feature.onboarding.OnboardingScreen
 import com.lingoleap.presentation.feature.practice.PracticeRoute
 import com.lingoleap.presentation.feature.practice.PracticeScreen
+import com.lingoleap.presentation.feature.profile.ProfileEffect
 import com.lingoleap.presentation.feature.profile.ProfileScreen
+import com.lingoleap.presentation.feature.profile.ProfileViewModel
+import com.lingoleap.presentation.feature.progress.ProgressEffect
 import com.lingoleap.presentation.feature.progress.ProgressScreen
+import com.lingoleap.presentation.feature.progress.ProgressViewModel
 import com.lingoleap.presentation.feature.quiz.QuizRoute
 import com.lingoleap.presentation.feature.quiz.QuizScreen
 import com.lingoleap.presentation.navigation.LingoRoute
 import com.lingoleap.presentation.theme.LingoLeapTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -64,7 +73,55 @@ private fun LingoLeapApp() {
                 lessonId = lessonId
             )
         }
-        composable(LingoRoute.Progress.path) { ProgressScreen(onEvent = {}) }
-        composable(LingoRoute.Profile.path) { ProfileScreen(onEvent = {}) }
+        composable(LingoRoute.Progress.path) {
+            val viewModel: ProgressViewModel = hiltViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            LaunchedEffect(Unit) {
+                viewModel.effect.collectLatest { effect ->
+
+                    when (effect) {
+
+                        ProfileEffect.NavigateToLanguages -> {
+                            // Navigation
+                        }
+
+                        ProfileEffect.NavigateToStatistics -> {
+                            // Navigation
+                        }
+
+                        ProfileEffect.NavigateToAchievements -> {
+                            // Navigation
+                        }
+
+                        ProfileEffect.NavigateToSettings -> {
+                            // Navigation
+                        }
+
+                        ProfileEffect.NavigateToHelpSupport -> {
+                            // Navigation
+                        }
+
+                        ProfileEffect.SignOut -> {
+                            // Sign-out
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+            ProgressScreen(
+                state = state,
+                onEvent = viewModel::onEvent
+            )
+        }
+
+        composable(LingoRoute.Profile.path) {
+
+            val viewModel: ProfileViewModel = hiltViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            ProfileScreen(
+                state = state, onEvent = viewModel::onEvent) }
     }
 }
