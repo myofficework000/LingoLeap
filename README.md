@@ -1,4 +1,4 @@
-# LingoLeap — multilingual learning app starter
+# LingoLeap — multilingual learning app
 
 LingoLeap is a buildable Android app for short, game-like Indian-language learning loops. The prototype reference image below defines the intended journey and visual direction; the implementation uses Material 3 tokens rather than copied hard-coded screen colors.
 
