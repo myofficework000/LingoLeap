@@ -68,7 +68,7 @@ private fun LingoLeapApp() {
             composable(LingoRoute.Home.path) {
                 HomeScreen(
                     onContinueLearning = { navController.navigate(LingoRoute.Lessons.path) },
-                    onPractice = { navController.navigate(LingoRoute.Practice.create("hi-basics")) },
+                    onPractice = { navController.navigate(LingoRoute.Practice.create("en-hi-greetings")) },
                     onProfile = { navController.navigate(LingoRoute.Profile.path) },
                 )
             }
@@ -86,9 +86,29 @@ private fun LingoLeapApp() {
                 val lessonId = backStackEntry.arguments?.getString("lessonId") ?: return@composable
                 QuizRoute(lessonId = lessonId, onNext = { navController.navigate(LingoRoute.Practice.create(lessonId)) })
             }
-            composable(LingoRoute.Practice.path) { backStackEntry ->
-                val lessonId = backStackEntry.arguments?.getString("lessonId") ?: return@composable
-                PracticeRoute(lessonId = lessonId)
+            composable(
+                route = LingoRoute.Practice.path
+            ) { backStackEntry ->
+
+                val lessonId =
+                    backStackEntry.arguments
+                        ?.getString("lessonId")
+                        ?: return@composable
+
+                PracticeRoute(
+                    lessonId = lessonId,
+                    onFinished = {
+                        navController.navigate(
+                            LingoRoute.Home.path
+                        ) {
+                            popUpTo(
+                                LingoRoute.Practice.path
+                            ) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
             }
             composable(LingoRoute.Progress.path) {
                 val viewModel: ProgressViewModel = hiltViewModel()
