@@ -14,8 +14,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,41 +29,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.lingoleap.core.mvi.UiEvent
+import com.lingoleap.core.mvi.UiState
+import com.lingoleap.domain.model.Course
+import com.lingoleap.domain.model.LearnerProgress
 import com.lingoleap.domain.model.Lesson
+import com.lingoleap.domain.usecase.LessonRules
 
 @Composable
 fun LessonsListScreen(
-    onBack: () -> Unit,
-    onLessonClick: (String) -> Unit,
+    onEvent: (LessonsListEvent) -> Unit,
     viewModel: LessonsListViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LessonsListContent(
         state = state,
-        onBack = onBack,
-        onLessonClick = onLessonClick
+        onEvent = onEvent
     )
 }
 
 @Composable
 private fun LessonsListContent(
     state: LessonsListState,
-    onBack: () -> Unit,
-    onLessonClick: (String) -> Unit
+    onEvent: (LessonsListEvent) -> Unit
 ) {
-
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 20.dp)
         ) {
-
             Spacer(
                 modifier = Modifier.height(16.dp)
             )
@@ -72,11 +70,11 @@ private fun LessonsListContent(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 IconButton(
-                    onClick = onBack
+                    onClick = {
+                        onEvent(LessonsListEvent.Back)
+                    }
                 ) {
-
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
@@ -112,62 +110,104 @@ private fun LessonsListContent(
             )
 
             when {
-
                 state.isLoading -> {
-
-                    Text(
-                        text = "Loading lessons..."
-                    )
+                    LoadingContent()
                 }
 
                 state.error != null -> {
-
-                    Text(
-                        text = state.error,
-                        color = MaterialTheme.colorScheme.error
+                    ErrorContent(
+                        message = state.error
                     )
                 }
 
                 state.course != null -> {
-
                     LessonList(
                         lessons = state.course.lessons,
                         completedLessonIds =
                             state.progress?.completedLessonIds
                                 ?: emptySet(),
-                        onLessonClick = onLessonClick
+                        onEvent = onEvent
                     )
+                }
+
+                else -> {
+                    EmptyContent()
                 }
             }
         }
     }
 }
+
+@Composable
+private fun LoadingContent() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Loading lessons...",
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Composable
+private fun ErrorContent(
+    message: String
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = message,
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Composable
+private fun EmptyContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "No lessons available",
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
 @Composable
 private fun LessonList(
     lessons: List<Lesson>,
     completedLessonIds: Set<String>,
-    onLessonClick: (String) -> Unit
+    onEvent: (LessonsListEvent) -> Unit
 ) {
-
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-
         items(
             items = lessons,
             key = { it.id }
         ) { lesson ->
 
-            val isCompleted = lesson.id in completedLessonIds
+            val isCompleted =
+                lesson.id in completedLessonIds
 
             val isLocked =
-                lesson.order > 1 &&
-                        lessons
-                            .firstOrNull {
-                                it.order == lesson.order - 1
-                            }
-                            ?.id !in completedLessonIds
+                LessonRules.isLocked(
+                    lesson = lesson,
+                    lessons = lessons,
+                    completedLessonIds = completedLessonIds
+                )
 
             LessonItem(
                 lesson = lesson,
@@ -175,13 +215,18 @@ private fun LessonList(
                 isLocked = isLocked,
                 onClick = {
                     if (!isLocked) {
-                        onLessonClick(lesson.id)
+                        onEvent(
+                            LessonsListEvent.LessonClicked(
+                                lesson.id
+                            )
+                        )
                     }
                 }
             )
         }
     }
 }
+
 @Composable
 private fun LessonItem(
     lesson: Lesson,
@@ -189,27 +234,23 @@ private fun LessonItem(
     isLocked: Boolean,
     onClick: () -> Unit
 ) {
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         onClick = onClick,
         enabled = !isLocked
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Surface(
                 modifier = Modifier.size(42.dp),
                 shape = RoundedCornerShape(12.dp),
                 tonalElevation = 2.dp
             ) {
-
                 Text(
                     text = lesson.order.toString(),
                     modifier = Modifier.padding(10.dp),
@@ -224,7 +265,6 @@ private fun LessonItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-
                 Text(
                     text = lesson.title,
                     style = MaterialTheme.typography.titleMedium
@@ -241,9 +281,7 @@ private fun LessonItem(
             }
 
             when {
-
                 isCompleted -> {
-
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = "Completed"
@@ -251,7 +289,6 @@ private fun LessonItem(
                 }
 
                 isLocked -> {
-
                     Icon(
                         imageVector = Icons.Default.Lock,
                         contentDescription = "Locked"
@@ -259,7 +296,6 @@ private fun LessonItem(
                 }
 
                 else -> {
-
                     Text(
                         text = "›",
                         style = MaterialTheme.typography.headlineSmall

@@ -24,36 +24,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun HomeScreen(
-    onContinueLearning: () -> Unit = {},
-    onPractice: () -> Unit = {},
-    onProfile: () -> Unit = {},
-    viewModel: HomeViewModel = hiltViewModel()
-) {
+fun HomeScreen(onEvent: (HomeEvent) -> Unit, viewModel: HomeViewModel = hiltViewModel()) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    HomeContent(
-        state = state,
-        onContinueLearning = onContinueLearning,
-        onPractice = onPractice,
-        onProfile = onProfile
-    )
+    HomeContent(state = state, onEvent = onEvent)
 }
 
 @Composable
-private fun HomeContent(
-    state: HomeState,
-    onContinueLearning: () -> Unit,
-    onPractice: () -> Unit,
-    onProfile: () -> Unit
-) {
+private fun HomeContent(state: HomeState, onEvent: (HomeEvent) -> Unit){
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -85,7 +68,9 @@ private fun HomeContent(
                 }
 
                 IconButton(
-                    onClick = onProfile
+                    onClick = {
+                        onEvent(HomeEvent.Profile)
+                    }
                 ) {
 
                     Icon(
@@ -104,7 +89,9 @@ private fun HomeContent(
 
                 CourseCard(
                     course = course,
-                    onClick = onContinueLearning
+                    onClick = {
+                        onEvent(HomeEvent.ContinueLearning)
+                    }
                 )
             }
 
@@ -153,12 +140,11 @@ private fun HomeContent(
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(14.dp),
-                onClick = onContinueLearning
+                onClick = {
+                    onEvent(HomeEvent.ContinueLearning)
+                }
             ) {
-
-                Text(
-                    text = "Continue Learning"
-                )
+                Text("Continue Learning")
             }
 
             Spacer(
@@ -180,7 +166,9 @@ private fun HomeContent(
                 SmallFeatureCard(
                     title = "Practice",
                     modifier = Modifier.weight(1f),
-                    onClick = onPractice
+                    onClick = {
+                        onEvent(HomeEvent.Practice)
+                    }
                 )
             }
 
