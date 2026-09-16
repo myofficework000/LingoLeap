@@ -3,10 +3,17 @@ package com.lingoleap.presentation.feature.lesson
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -28,6 +35,7 @@ import com.lingoleap.domain.model.Lesson
 import com.lingoleap.domain.model.VocabularyWord
 import com.lingoleap.domain.usecase.CompleteLessonUseCase
 import com.lingoleap.domain.usecase.GetCoursesUseCase
+import com.lingoleap.domain.usecase.LessonRules
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -38,59 +46,209 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class LessonState(val lesson: Lesson? = null, val wordIndex: Int = 0, val isLoading: Boolean = true, val error: String? = null) : UiState {
-    val currentWord: VocabularyWord? get() = lesson?.words?.getOrNull(wordIndex)
-    val isLastWord: Boolean get() = lesson?.words?.lastIndex == wordIndex
-}
-sealed interface LessonEvent : UiEvent { data object Next : LessonEvent; data object Previous : LessonEvent; data object PlayAudio : LessonEvent; data object Finish : LessonEvent }
-sealed interface LessonEffect : UiEffect { data object Completed : LessonEffect }
-
-@HiltViewModel
-class LessonViewModel @Inject constructor(
-    private val getCourses: GetCoursesUseCase,
-    private val completeLesson: CompleteLessonUseCase,
-    private val pronunciationPlayer: PronunciationPlayer,
-) : ViewModel() {
-    private val _state = MutableStateFlow(LessonState())
-    val state = _state.asStateFlow()
-    private val _effect = Channel<LessonEffect>(Channel.BUFFERED)
-    val effect: Flow<LessonEffect> = _effect.receiveAsFlow()
-
-    fun load(lessonId: String) = viewModelScope.launch {
-        runCatching { getCourses().flatMap { it.lessons }.first { it.id == lessonId } }
-            .onSuccess { lesson -> _state.update { LessonState(lesson = lesson, isLoading = false) } }
-            .onFailure { error -> _state.update { LessonState(isLoading = false, error = error.message ?: "Lesson unavailable") } }
-    }
-
-    fun onEvent(event: LessonEvent) = when (event) {
-        LessonEvent.Next -> _state.update { it.copy(wordIndex = (it.wordIndex + 1).coerceAtMost(it.lesson?.words?.lastIndex ?: 0)) }
-        LessonEvent.Previous -> _state.update { it.copy(wordIndex = (it.wordIndex - 1).coerceAtLeast(0)) }
-        LessonEvent.PlayAudio -> viewModelScope.launch { _state.value.currentWord?.let { pronunciationPlayer.play(it.targetText, "hi-IN") } }
-        LessonEvent.Finish -> viewModelScope.launch { _state.value.lesson?.let { completeLesson(it.id); _effect.send(LessonEffect.Completed) } }
-    }
-    override fun onCleared() { pronunciationPlayer.release() }
-}
 
 @Composable
-fun LessonRoute(lessonId: String, onCompleted: () -> Unit, viewModel: LessonViewModel = hiltViewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    LaunchedEffect(lessonId) { viewModel.load(lessonId) }
-    LaunchedEffect(viewModel) { viewModel.effect.collect { if (it is LessonEffect.Completed) onCompleted() } }
-    LessonScreen(state, viewModel::onEvent)
-}
-
-@Composable
-fun LessonScreen(state: LessonState, onEvent: (LessonEvent) -> Unit) = Column(
-    modifier = Modifier.fillMaxSize().padding(24.dp),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally,
+fun LessonRoute(lessonId: String, onCompleted: () -> Unit, viewModel: LessonViewModel = hiltViewModel()
 ) {
-    val word = state.currentWord
-    Text(word?.targetText ?: state.error ?: "Loading lesson…", style = MaterialTheme.typography.headlineMedium)
-    Text(word?.transliteration.orEmpty(), style = MaterialTheme.typography.titleMedium)
-    OutlinedButton(onClick = { onEvent(LessonEvent.PlayAudio) }, enabled = word != null) { Text("Play pronunciation") }
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        OutlinedButton(onClick = { onEvent(LessonEvent.Previous) }, enabled = state.wordIndex > 0) { Text("Previous") }
-        Button(onClick = { onEvent(if (state.isLastWord) LessonEvent.Finish else LessonEvent.Next) }, enabled = word != null) { Text(if (state.isLastWord) "Start quiz" else "Next") }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(lessonId) {
+        viewModel.load(lessonId)
+    }
+
+    LaunchedEffect(viewModel) {
+
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is LessonEffect.Completed -> {
+                    onCompleted()
+                }
+                is LessonEffect.ShowMessage -> {
+
+                }
+            }
+        }
+    }
+
+    LessonScreen(
+        state = state,
+        onEvent = viewModel::onEvent
+    )
+}
+
+@Composable
+fun LessonScreen(state: LessonState, onEvent: (LessonEvent) -> Unit
+) {
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(24.dp)
+    ) {
+
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+
+            IconButton(
+                onClick = { onEvent(LessonEvent.Previous) },
+                enabled = !state.isFirstWord
+            ) {
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Previous word"
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Text(
+                    text = state.lesson?.title ?: "Lesson",
+                    style = MaterialTheme.typography.titleLarge)
+
+                Text(
+                    text =
+                        if (state.totalWords > 0) { "${state.wordIndex + 1} of ${state.totalWords}"
+                        }
+                        else {"" },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+        LinearProgressIndicator(
+            progress = { state.progress },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(
+            modifier = Modifier.height(48.dp)
+        )
+
+        val word = state.currentWord
+        if (word != null) {
+            Text(
+                text = word.sourceText,
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            Spacer(
+                modifier = Modifier.height(24.dp)
+            )
+
+            Text(
+                text = word.targetText,
+                style =
+                    MaterialTheme.typography
+                        .displaySmall
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            word.transliteration?.takeIf { it.isNotBlank() }?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
+            Spacer(
+                modifier = Modifier.height(24.dp)
+            )
+
+            OutlinedButton(
+                onClick = { onEvent(LessonEvent.PlayAudio) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = " Play pronunciation")
+            }
+
+            state.audioError?.let { message ->
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = message,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+        } else if (state.error != null) {
+
+            Text(
+                text = state.error,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.weight(1f)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement =
+                Arrangement.spacedBy(12.dp)
+        ) {
+
+            OutlinedButton(
+                modifier =
+                    Modifier.weight(1f),
+                enabled =
+                    !state.isFirstWord,
+                onClick = {
+                    onEvent(
+                        LessonEvent.Previous
+                    )
+                }
+            ) {
+
+                Text("Previous")
+            }
+
+            Button(
+                modifier =
+                    Modifier.weight(1f),
+                enabled =
+                    word != null &&
+                            !state.isCompleting,
+                onClick = {
+
+                    if (state.isLastWord) {
+
+                        onEvent(
+                            LessonEvent.Finish
+                        )
+
+                    } else {
+
+                        onEvent(
+                            LessonEvent.Next
+                        )
+                    }
+                }
+            ) {
+
+                Text(
+                    if (state.isLastWord) {
+                        if (state.canComplete) {
+                            "Complete"
+                        } else {
+                            "Review"
+                        }
+                    } else {
+                        "Next"
+                    }
+                )
+            }
+        }
     }
 }

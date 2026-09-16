@@ -1,6 +1,13 @@
 package com.lingoleap.domain.model
 
-data class Language(val id: String, val name: String, val nativeName: String, val script: String)
+data class Language(
+    val id: String,
+    val name: String,
+    val nativeName: String,
+    val script: String,
+    val locale: String
+)
+
 data class LanguagePair(val id: String, val sourceLanguageId: String, val targetLanguageId: String)
 data class Course(
     val id: String,
@@ -13,7 +20,8 @@ data class Lesson(
     val id: String,
     val title: String,
     val order: Int,
-    val words: List<VocabularyWord>
+    val words: List<VocabularyWord>,
+    val pronunciationLanguageTag: String
 )
 
 data class VocabularyWord(

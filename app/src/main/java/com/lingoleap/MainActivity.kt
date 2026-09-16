@@ -14,9 +14,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.lingoleap.presentation.feature.home.HomeEvent
 import com.lingoleap.presentation.feature.home.HomeScreen
 import com.lingoleap.presentation.feature.language.LanguagePickerRoute
 import com.lingoleap.presentation.feature.lesson.LessonRoute
+import com.lingoleap.presentation.feature.lesson.LessonsListEvent
 import com.lingoleap.presentation.feature.lesson.LessonsListScreen
 import com.lingoleap.presentation.feature.onboarding.OnboardingRoute
 import com.lingoleap.presentation.feature.practice.PracticeRoute
@@ -67,15 +69,83 @@ private fun LingoLeapApp() {
             }
             composable(LingoRoute.Home.path) {
                 HomeScreen(
-                    onContinueLearning = { navController.navigate(LingoRoute.Lessons.path) },
-                    onPractice = { navController.navigate(LingoRoute.Practice.create("hi-basics")) },
-                    onProfile = { navController.navigate(LingoRoute.Profile.path) },
+                    onEvent = { event ->
+
+                        when (event) {
+
+                            HomeEvent.ContinueLearning -> {
+
+                                navController.navigate(
+                                    LingoRoute.Lessons.path
+                                )
+                            }
+
+                            HomeEvent.Practice -> {
+
+                                navController.navigate(
+                                    LingoRoute.Practice.create(
+                                        lessonId = ""
+                                    )
+                                )
+                            }
+
+                            HomeEvent.Profile -> {
+
+                                navController.navigate(
+                                    LingoRoute.Profile.path
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+            composable(
+                route = LingoRoute.Lesson.path
+            ) { backStackEntry ->
+
+                val lessonId =
+                    backStackEntry.arguments
+                        ?.getString("lessonId")
+                        ?: return@composable
+
+                LessonRoute(
+                    lessonId = lessonId,
+                    onCompleted = {
+
+                        navController.navigate(
+                            LingoRoute.Quiz.create(
+                                lessonId
+                            )
+                        ) {
+                            popUpTo(
+                                LingoRoute.Lesson.path
+                            ) {
+                                inclusive = true
+                            }
+                        }
+                    }
                 )
             }
             composable(LingoRoute.Lessons.path) {
                 LessonsListScreen(
-                    onBack = { navController.popBackStack() },
-                    onLessonClick = { lessonId -> navController.navigate(LingoRoute.Lesson.create(lessonId)) },
+                    onEvent = { event ->
+
+                        when (event) {
+
+                            LessonsListEvent.Back -> {
+                                navController.popBackStack()
+                            }
+
+                            is LessonsListEvent.LessonClicked -> {
+
+                                navController.navigate(
+                                    LingoRoute.Lesson.create(
+                                        event.lessonId
+                                    )
+                                )
+                            }
+                        }
+                    }
                 )
             }
             composable(LingoRoute.Lesson.path) { backStackEntry ->
