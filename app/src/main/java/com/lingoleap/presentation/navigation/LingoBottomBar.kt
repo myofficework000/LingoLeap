@@ -14,7 +14,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 
-private data class BottomDestination(val route: LingoRoute, val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
+private data class BottomDestination(
+    val route: LingoRoute,
+    val label: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector
+)
+
 private val destinations = listOf(
     BottomDestination(LingoRoute.Home, "Home", Icons.Default.Home),
     BottomDestination(LingoRoute.Lessons, "Learn", Icons.Default.School),
@@ -30,7 +35,8 @@ fun LingoBottomBar(navController: NavHostController) {
             NavigationBarItem(
                 selected = currentRoute == destination.route.path,
                 onClick = {
-                    val destinationPath = if (destination.route == LingoRoute.Practice) LingoRoute.Practice.create("hi-basics") else destination.route.path
+                    val destinationPath =
+                        if (destination.route == LingoRoute.Practice) LingoRoute.Practice.create("en-hi-greetings") else destination.route.path
                     navController.navigate(destinationPath, navOptions {
                         launchSingleTop = true
                         restoreState = true
