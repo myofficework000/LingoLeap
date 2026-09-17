@@ -84,7 +84,7 @@ private fun LingoLeapApp() {
 
                                 navController.navigate(
                                     LingoRoute.Practice.create(
-                                        lessonId = ""
+                                        lessonId = "en-hi-greetings"
                                     )
                                 )
                             }
