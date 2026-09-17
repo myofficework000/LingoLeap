@@ -88,13 +88,25 @@ private fun Catalog.toCourses(): List<Course> {
                     title = contentLesson.title,
                     order = index + 1,
                     words = contentLesson.words.mapIndexed { wordIndex, word ->
+
                         VocabularyWord(
                             id = "${pair.id}-${contentLesson.key}-${wordIndex + 1}",
-                            sourceText = if (isEnglishToRegional) word.english else word.native,
-                            targetText = if (isEnglishToRegional) word.native else word.english,
-                            transliteration = word.transliteration,
+                            sourceText = if (isEnglishToRegional) { word.english
+                            } else {
+                                word.native
+                            },
+                            targetText = if (isEnglishToRegional) {
+                                word.native
+                            } else {
+                                word.english
+                            },
+                            transliteration = word.transliteration
                         )
                     },
+                    pronunciationLanguageTag =
+                        languagesById[pair.targetLanguageId]
+                            ?.locale
+                            ?: "en-US"
                 )
             },
         )
