@@ -158,16 +158,18 @@ private fun HomeContent(state: HomeState, onEvent: (HomeEvent) -> Unit){
             ) {
 
                 SmallFeatureCard(
-                    title = "Games",
+                    title = "Daily Challenge",
                     modifier = Modifier.weight(1f),
-                    onClick = {}
+                    onClick = {
+                        onEvent(HomeEvent.DailyChallenge)
+                    }
                 )
 
                 SmallFeatureCard(
-                    title = "Practice",
+                    title = "Learning Path",
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        onEvent(HomeEvent.Practice)
+                        onEvent(HomeEvent.LearningPath)
                     }
                 )
             }

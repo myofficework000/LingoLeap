@@ -30,6 +30,10 @@ sealed interface HomeEvent : UiEvent {
     data object Practice : HomeEvent
 
     data object Profile : HomeEvent
+
+    data object DailyChallenge : HomeEvent
+
+    data object LearningPath : HomeEvent
 }
 
 @HiltViewModel
@@ -116,6 +120,14 @@ class HomeViewModel @Inject constructor(
             }
 
             HomeEvent.Profile -> {
+
+            }
+
+            HomeEvent.DailyChallenge -> {
+
+            }
+
+            HomeEvent.LearningPath -> {
 
             }
         }

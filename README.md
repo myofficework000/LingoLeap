@@ -27,6 +27,8 @@ LingoLeap is a buildable Android app for short, game-like Indian-language learni
 - Lifecycle-aware `StateFlow` collection. Independent catalog reads load concurrently and disk JSON reads run on `Dispatchers.IO`.
 - One source of truth for primary/secondary/error/surface colors in `presentation/theme`.
 - Phase 2 foundations: DataStore session/language preferences, Room-backed learner progress, a platform-neutral pronunciation player, lesson completion persistence, achievement rules, and learning-path state derivation.
+- Gamified learning path: progress-aware completed, current, and locked lesson nodes with direct navigation into an available lesson.
+- Daily Challenge: a data-driven, MVI-based quiz flow with immediate feedback and session XP totals.
 
 ## Architecture
 
@@ -47,7 +49,7 @@ app/src/main/java/com/lingoleap
     └── theme
 ```
 
-`assets/learning_catalog.json` is the temporary backend. Catalog v2 contains English plus 14 regional-language curricula, 28 bidirectional English language pairs, 84 generated beginner lessons, 168 vocabulary entries, deterministic quiz data, and sample progress. A single regional curriculum generates both directions, so translations do not drift between English → regional and regional → English courses. `assets/learning_catalog.schema.json` documents the authoring contract for future content additions. The flow is fully implemented:
+`assets/learning_catalog.json` is the temporary backend. Catalog v2 contains English plus 14 regional-language curricula, 28 bidirectional English language pairs, 84 generated beginner lessons, 168 vocabulary entries, deterministic quiz data, and sample progress. `assets/daily_challenges.json` adds 14 language-specific daily challenges with hints and XP rewards. A single regional curriculum generates both directions, so translations do not drift between English → regional and regional → English courses. `assets/learning_catalog.schema.json` documents the authoring contract for future content additions. The flow is fully implemented:
 
 ```text
 learning_catalog.json → LearningCatalogDataSource → LearningRepositoryImpl → use cases

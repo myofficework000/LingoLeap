@@ -1,0 +1,16 @@
+[
+  {"id":"hi-greeting","lessonId":"en-hi-greetings","title":"Hindi hello","prompt":"Choose the Hindi word for Hello.","choices":["नमस्ते","धन्यवाद","पानी","किताब"],"correctAnswer":"नमस्ते","hint":"It is commonly used as a respectful greeting.","xpReward":10},
+  {"id":"kn-thanks","lessonId":"en-kn-greetings","title":"Kannada thanks","prompt":"What does ಧನ್ಯವಾದ mean?","choices":["Thank you","Hello","Friend","Home"],"correctAnswer":"Thank you","hint":"Use it after someone helps you.","xpReward":10},
+  {"id":"te-water","lessonId":"en-te-everyday","title":"Telugu water","prompt":"Choose the Telugu word for Water.","choices":["నీరు","పుస్తకం","ఇల్లు","ఆహారం"],"correctAnswer":"నీరు","hint":"It sounds like neeru.","xpReward":10},
+  {"id":"ta-greeting","lessonId":"en-ta-greetings","title":"Tamil hello","prompt":"What does வணக்கம் mean?","choices":["Hello","No","Book","Please"],"correctAnswer":"Hello","hint":"It is a classic Tamil greeting.","xpReward":10},
+  {"id":"ml-home","lessonId":"en-ml-everyday","title":"Malayalam home","prompt":"Choose the Malayalam word for Home.","choices":["വീട്","വെള്ളം","നന്ദി","ഞാൻ"],"correctAnswer":"വീട്","hint":"It sounds like veedu.","xpReward":10},
+  {"id":"mr-friend","lessonId":"en-mr-people","title":"Marathi friend","prompt":"What does मित्र mean?","choices":["Friend","You","Food","Yes"],"correctAnswer":"Friend","hint":"It is related to the word mitra.","xpReward":10},
+  {"id":"bn-book","lessonId":"en-bn-everyday","title":"Bengali book","prompt":"Choose the Bengali word for Book.","choices":["বই","জল","বাড়ি","খাবার"],"correctAnswer":"বই","hint":"It is pronounced boi.","xpReward":10},
+  {"id":"gu-thanks","lessonId":"en-gu-greetings","title":"Gujarati thanks","prompt":"What does આભાર mean?","choices":["Thank you","No","Water","Friend"],"correctAnswer":"Thank you","hint":"Say it when expressing gratitude.","xpReward":10},
+  {"id":"pa-please","lessonId":"en-pa-people","title":"Punjabi please","prompt":"Choose the Punjabi phrase for Please.","choices":["ਕਿਰਪਾ ਕਰਕੇ","ਦੋਸਤ","ਪਾਣੀ","ਘਰ"],"correctAnswer":"ਕਿਰਪਾ ਕਰਕੇ","hint":"It is a polite request phrase.","xpReward":10},
+  {"id":"ur-yes","lessonId":"en-ur-greetings","title":"Urdu yes","prompt":"What does ہاں mean?","choices":["Yes","No","Hello","Food"],"correctAnswer":"Yes","hint":"It is pronounced haan.","xpReward":10},
+  {"id":"or-water","lessonId":"en-or-everyday","title":"Odia water","prompt":"Choose the Odia word for Water.","choices":["ପାଣି","ବହି","ଘର","ଖାଦ୍ୟ"],"correctAnswer":"ପାଣି","hint":"It shares a sound with paani.","xpReward":10},
+  {"id":"as-friend","lessonId":"en-as-people","title":"Assamese friend","prompt":"What does বন্ধু mean?","choices":["Friend","You","Home","No"],"correctAnswer":"Friend","hint":"It is pronounced bondhu.","xpReward":10},
+  {"id":"ne-greeting","lessonId":"en-ne-greetings","title":"Nepali hello","prompt":"Choose the Nepali word for Hello.","choices":["नमस्ते","धन्यवाद","होइन","घर"],"correctAnswer":"नमस्ते","hint":"It is also used in Hindi.","xpReward":10},
+  {"id":"sa-water","lessonId":"en-sa-everyday","title":"Sanskrit water","prompt":"What does जलम् mean?","choices":["Water","Book","Food","Please"],"correctAnswer":"Water","hint":"It is pronounced jalam.","xpReward":10}
+]

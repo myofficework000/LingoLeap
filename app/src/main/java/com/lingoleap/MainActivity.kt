@@ -16,10 +16,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.lingoleap.presentation.feature.home.HomeEvent
 import com.lingoleap.presentation.feature.home.HomeScreen
+import com.lingoleap.presentation.feature.challenge.DailyChallengeRoute
 import com.lingoleap.presentation.feature.language.LanguagePickerRoute
 import com.lingoleap.presentation.feature.lesson.LessonRoute
 import com.lingoleap.presentation.feature.lesson.LessonsListEvent
 import com.lingoleap.presentation.feature.lesson.LessonsListScreen
+import com.lingoleap.presentation.feature.learningpath.LearningPathRoute
 import com.lingoleap.presentation.feature.onboarding.OnboardingRoute
 import com.lingoleap.presentation.feature.practice.PracticeRoute
 import com.lingoleap.presentation.feature.splash.SplashRoute
@@ -95,32 +97,13 @@ private fun LingoLeapApp() {
                                     LingoRoute.Profile.path
                                 )
                             }
-                        }
-                    }
-                )
-            }
-            composable(
-                route = LingoRoute.Lesson.path
-            ) { backStackEntry ->
 
-                val lessonId =
-                    backStackEntry.arguments
-                        ?.getString("lessonId")
-                        ?: return@composable
+                            HomeEvent.DailyChallenge -> {
+                                navController.navigate(LingoRoute.DailyChallenge.path)
+                            }
 
-                LessonRoute(
-                    lessonId = lessonId,
-                    onCompleted = {
-
-                        navController.navigate(
-                            LingoRoute.Quiz.create(
-                                lessonId
-                            )
-                        ) {
-                            popUpTo(
-                                LingoRoute.Lesson.path
-                            ) {
-                                inclusive = true
+                            HomeEvent.LearningPath -> {
+                                navController.navigate(LingoRoute.LearningPath.path)
                             }
                         }
                     }
@@ -205,6 +188,18 @@ private fun LingoLeapApp() {
                 ProfileScreen(state = state, onEvent = viewModel::onEvent)
             }
             composable(LingoRoute.Achievements.path) { AchievementsScreen(onEvent = { navController.popBackStack() }) }
+            composable(LingoRoute.DailyChallenge.path) {
+                DailyChallengeRoute(
+                    onBack = { navController.popBackStack() },
+                    onFinished = { navController.navigate(LingoRoute.Home.path) { popUpTo(LingoRoute.Home.path) { inclusive = false } } },
+                )
+            }
+            composable(LingoRoute.LearningPath.path) {
+                LearningPathRoute(
+                    onBack = { navController.popBackStack() },
+                    onOpenLesson = { lessonId -> navController.navigate(LingoRoute.Lesson.create(lessonId)) },
+                )
+            }
         }
     }
 }

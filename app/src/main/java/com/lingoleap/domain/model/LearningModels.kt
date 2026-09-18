@@ -39,6 +39,17 @@ data class Quiz(
     val correctAnswer: String
 )
 
+data class DailyChallenge(
+    val id: String,
+    val lessonId: String,
+    val title: String,
+    val prompt: String,
+    val choices: List<String>,
+    val correctAnswer: String,
+    val hint: String,
+    val xpReward: Int,
+)
+
 data class LearnerProgress(
     val activeCourseId: String,
     val completedLessonIds: Set<String>,
