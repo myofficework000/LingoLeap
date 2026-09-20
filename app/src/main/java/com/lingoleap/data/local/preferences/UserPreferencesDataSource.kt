@@ -39,7 +39,7 @@ class UserPreferencesDataSource @Inject constructor(
         context.dataStore.data.map { prefs ->
 
             UserPreferences(
-                onboardingCompleted =
+                hasCompletedOnboarding =
                     prefs[Keys.ONBOARDING_COMPLETED] ?: false,
 
                 sourceLanguageId =

@@ -12,4 +12,6 @@ sealed class LingoRoute(val path: String) {
     data object Progress : LingoRoute("progress")
     data object Profile : LingoRoute("profile")
     data object Achievements : LingoRoute("achievements")
+
+    data object LearningPath : LingoRoute("learning_path")
 }

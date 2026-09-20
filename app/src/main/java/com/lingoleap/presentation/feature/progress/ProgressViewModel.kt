@@ -20,6 +20,8 @@ import javax.inject.Inject
 sealed interface ProgressEffect {
 
     data object NavigateToAchievements : ProgressEffect
+
+    data object NavigateToLearningPath : ProgressEffect
 }
 
 @HiltViewModel
@@ -49,6 +51,16 @@ class ProgressViewModel @Inject constructor(private val getLearnerProgressUseCas
                 viewModelScope.launch {
                     _effect.send(
                         ProgressEffect.NavigateToAchievements
+                    )
+                }
+            }
+
+            ProgressEvent.OpenLearningPath -> {
+
+                viewModelScope.launch {
+
+                    _effect.send(
+                        ProgressEffect.NavigateToLearningPath
                     )
                 }
             }

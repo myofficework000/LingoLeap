@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.lingoleap.presentation.feature.home.HomeEvent
 import com.lingoleap.presentation.feature.home.HomeScreen
 import com.lingoleap.presentation.feature.language.LanguagePickerRoute
+import com.lingoleap.presentation.feature.learningpath.LearningPathScreen
 import com.lingoleap.presentation.feature.lesson.LessonRoute
 import com.lingoleap.presentation.feature.lesson.LessonsListEvent
 import com.lingoleap.presentation.feature.lesson.LessonsListScreen
@@ -184,7 +185,25 @@ private fun LingoLeapApp() {
                 val viewModel: ProgressViewModel = hiltViewModel()
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 LaunchedEffect(viewModel) {
-                    viewModel.effect.collectLatest { if (it is ProgressEffect.NavigateToAchievements) navController.navigate(LingoRoute.Achievements.path) }
+                    viewModel.effect.collectLatest { effect ->
+
+                        when (effect) {
+
+                            ProgressEffect.NavigateToAchievements -> {
+
+                                navController.navigate(
+                                    LingoRoute.Achievements.path
+                                )
+                            }
+
+                            ProgressEffect.NavigateToLearningPath -> {
+
+                                navController.navigate(
+                                    LingoRoute.LearningPath.path
+                                )
+                            }
+                        }
+                    }
                 }
                 ProgressScreen(state = state, onEvent = viewModel::onEvent)
             }
@@ -204,6 +223,19 @@ private fun LingoLeapApp() {
                 }
                 ProfileScreen(state = state, onEvent = viewModel::onEvent)
             }
+
+            composable(LingoRoute.LearningPath.path) {
+
+                LearningPathScreen(
+                    onLessonClick = { lessonId ->
+
+                        navController.navigate(
+                            LingoRoute.Lesson.create(lessonId)
+                        )
+                    }
+                )
+            }
+
             composable(LingoRoute.Achievements.path) { AchievementsScreen(onEvent = { navController.popBackStack() }) }
         }
     }

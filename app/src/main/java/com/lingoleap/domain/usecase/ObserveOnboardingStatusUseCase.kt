@@ -10,6 +10,6 @@ class ObserveOnboardingStatusUseCase @Inject constructor(
 ) {
     operator fun invoke(): Flow<Boolean> {
         return repository.observePreferences()
-            .map { it.onboardingCompleted }
+            .map { it.hasCompletedOnboarding }
     }
 }

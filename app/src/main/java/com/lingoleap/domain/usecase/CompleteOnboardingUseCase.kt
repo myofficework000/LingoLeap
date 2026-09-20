@@ -7,6 +7,6 @@ class CompleteOnboardingUseCase @Inject constructor(
     private val repository: UserPreferencesRepository
 ) {
     suspend operator fun invoke() {
-        repository.setOnboardingCompleted(true)
+        repository.completeOnboarding(true)
     }
 }

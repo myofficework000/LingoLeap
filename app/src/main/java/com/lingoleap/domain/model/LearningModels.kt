@@ -58,6 +58,8 @@ data class Achievement(
     val title: String,
     val description: String,
     val isUnlocked: Boolean,
+    val currentProgress: Int,
+    val targetProgress: Int
 )
 
 enum class LearningPathNodeState { COMPLETED, CURRENT, LOCKED }
