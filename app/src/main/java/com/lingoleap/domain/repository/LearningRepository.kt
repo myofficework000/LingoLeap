@@ -12,7 +12,7 @@ interface LearningRepository {
     suspend fun getLanguages(): List<Language>
     suspend fun getLanguagePairs(): List<LanguagePair>
     suspend fun getCourses(): List<Course>
-    suspend fun getQuiz(lessonId: String): Quiz?
+    suspend fun getQuizzes(lessonId: String): List<Quiz>
     suspend fun getDailyChallenges(): List<DailyChallenge>
     suspend fun getProgress(): LearnerProgress
     fun observeProgress(): Flow<LearnerProgress>

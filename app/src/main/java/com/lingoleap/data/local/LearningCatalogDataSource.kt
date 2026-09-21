@@ -23,12 +23,20 @@ class LearningCatalogDataSource @Inject constructor(@param:ApplicationContext pr
     suspend fun languages(): List<Language> = withContext(Dispatchers.IO) { catalog.languages }
     suspend fun languagePairs(): List<LanguagePair> = withContext(Dispatchers.IO) { catalog.languagePairs }
     suspend fun courses(): List<Course> = withContext(Dispatchers.IO) { catalog.toCourses() }
-    suspend fun quiz(lessonId: String): Quiz? = withContext(Dispatchers.IO) {
+    suspend fun quizzes(
+        lessonId: String
+    ): List<Quiz> = withContext(Dispatchers.IO) {
+
         catalog.toCourses()
             .asSequence()
-            .flatMap { course -> course.lessons.asSequence() }
-            .firstOrNull { lesson -> lesson.id == lessonId }
-            ?.toQuiz()
+            .flatMap { course ->
+                course.lessons.asSequence()
+            }
+            .firstOrNull { lesson ->
+                lesson.id == lessonId
+            }
+            ?.toQuizzes()
+            ?: emptyList()
     }
     suspend fun progress(): LearnerProgress = withContext(Dispatchers.IO) { catalog.progress }
 }
@@ -113,13 +121,23 @@ private fun Catalog.toCourses(): List<Course> {
     }
 }
 
-private fun Lesson.toQuiz(): Quiz? {
-    val correctWord = words.firstOrNull() ?: return null
-    return Quiz(
-        id = "quiz-$id",
-        lessonId = id,
-        prompt = "Choose the correct meaning of ${correctWord.sourceText}",
-        choices = words.map { word -> word.targetText },
-        correctAnswer = correctWord.targetText,
-    )
+private fun Lesson.toQuizzes(): List<Quiz> {
+
+    if (words.isEmpty()) {
+        return emptyList()
+    }
+
+    return words.mapIndexed { index, word ->
+
+        Quiz(
+            id = "quiz-$id-${index + 1}",
+            lessonId = id,
+            prompt =
+                "Choose the correct meaning of ${word.sourceText}",
+            choices = words
+                .map { it.targetText }
+                .shuffled(),
+            correctAnswer = word.targetText
+        )
+    }
 }

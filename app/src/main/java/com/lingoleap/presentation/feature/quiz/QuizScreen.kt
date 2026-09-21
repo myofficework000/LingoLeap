@@ -7,20 +7,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,14 +28,17 @@ import com.lingoleap.core.mvi.UiState
 import com.lingoleap.domain.model.Quiz
 
 data class QuizState(
-    val quiz: Quiz? = null,
+    val quizzes: List<Quiz> = emptyList(),
+    val currentQuestionIndex: Int = 0,
     val selectedAnswer: String? = null,
-    val isAnswerChecked: Boolean = false
+    val isAnswerChecked: Boolean = false,
+    val score: Int = 0,
+    val isQuizCompleted: Boolean = false
 ) : UiState
 
 sealed interface QuizEvent : UiEvent {
-    data class SelectAnswer(val answer: String) : QuizEvent;
-    data object CheckAnswer : QuizEvent;
+    data class SelectAnswer(val answer: String) : QuizEvent
+    data object CheckAnswer : QuizEvent
     data object Next : QuizEvent
 }
 
@@ -47,23 +47,32 @@ fun QuizRoute(
     lessonId: String,
     onNext: () -> Unit,
     viewModel: QuizViewModel = hiltViewModel()
-){
+) {
     val state by viewModel.quizState.collectAsStateWithLifecycle()
 
     LaunchedEffect(lessonId) {
         viewModel.loadQuiz(lessonId)
     }
 
-    QuizScreen(
-        state = state,
-        onEvent = { event -> if (event == QuizEvent.Next) onNext() else viewModel.onEvent(event) },
-    )
+    if (state.isQuizCompleted) {
+        QuizCompletedScreen(
+            score = state.score,
+            total = state.quizzes.size,
+            onContinue = onNext
+        )
+    } else {
+        QuizScreen(
+            state = state,
+            onEvent = viewModel::onEvent
+        )
+    }
 }
 
 @Composable
 fun QuizScreen(state: QuizState = QuizState(), onEvent: (QuizEvent) -> Unit) {
 
-    val quiz = state.quiz
+    val quiz = state.quizzes.getOrNull(state.currentQuestionIndex)
+
     val colors = MaterialTheme.colorScheme
 
     if (quiz == null) {
@@ -77,6 +86,16 @@ fun QuizScreen(state: QuizState = QuizState(), onEvent: (QuizEvent) -> Unit) {
     }
 
     Column() {
+
+        Text(
+            text = "Question ${state.currentQuestionIndex + 1} of ${state.quizzes.size}",
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
         Text(
             text = quiz.prompt,
             style = MaterialTheme.typography.headlineMedium,
@@ -137,12 +156,54 @@ fun QuizScreen(state: QuizState = QuizState(), onEvent: (QuizEvent) -> Unit) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                if (state.isAnswerChecked) {
-                    "Next"
-                } else {
-                    "Check Answer"
+                when {
+                    !state.isAnswerChecked -> "Check Answer"
+
+                    state.currentQuestionIndex ==
+                            state.quizzes.lastIndex -> "Finish"
+
+                    else -> "Next"
                 }
             )
+        }
+    }
+}
+
+@Composable
+fun QuizCompletedScreen(
+    score: Int,
+    total: Int,
+    onContinue: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Text(
+            text = "Quiz Complete!",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Score: $score / $total",
+            style = MaterialTheme.typography.headlineSmall
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = onContinue,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Continue to Practice")
         }
     }
 }
@@ -166,7 +227,8 @@ fun QuizScreenPreview() {
 
     QuizScreen(
         state = QuizState(
-            quiz = fakeQuiz,
+            quizzes = listOf(fakeQuiz),
+            currentQuestionIndex = 0,
             selectedAnswer = "Book",
             isAnswerChecked = false
         ),

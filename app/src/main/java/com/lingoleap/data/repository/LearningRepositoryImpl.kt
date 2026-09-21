@@ -22,7 +22,8 @@ class LearningRepositoryImpl @Inject constructor(
     override suspend fun getLanguages(): List<Language> = source.languages()
     override suspend fun getLanguagePairs(): List<LanguagePair> = source.languagePairs()
     override suspend fun getCourses(): List<Course> = source.courses()
-    override suspend fun getQuiz(lessonId: String): Quiz? = source.quiz(lessonId)
+    override suspend fun getQuizzes(lessonId: String): List<Quiz> =
+        source.quizzes(lessonId)
     override suspend fun getDailyChallenges(): List<DailyChallenge> = dailyChallengeSource.challenges()
     override suspend fun getProgress(): LearnerProgress = progressSource.get() ?: source.progress().let { defaultProgress ->
         progressSource.save(defaultProgress)
