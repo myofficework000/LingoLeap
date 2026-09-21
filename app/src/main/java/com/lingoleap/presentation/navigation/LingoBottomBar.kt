@@ -35,13 +35,24 @@ fun LingoBottomBar(navController: NavHostController) {
             NavigationBarItem(
                 selected = currentRoute == destination.route.path,
                 onClick = {
+
                     val destinationPath =
-                        if (destination.route == LingoRoute.Practice) LingoRoute.Practice.create("en-hi-greetings") else destination.route.path
-                    navController.navigate(destinationPath, navOptions {
-                        launchSingleTop = true
-                        restoreState = true
-                        popUpTo(LingoRoute.Home.path) { saveState = true }
-                    })
+                        if (destination.route == LingoRoute.Practice) {
+                            LingoRoute.Quiz.create("en-hi-greetings")
+                        } else {
+                            destination.route.path
+                        }
+
+                    navController.navigate(
+                        destinationPath,
+                        navOptions {
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(LingoRoute.Home.path) {
+                                saveState = true
+                            }
+                        }
+                    )
                 },
                 icon = { Icon(destination.icon, contentDescription = destination.label) },
                 label = { Text(destination.label) },
