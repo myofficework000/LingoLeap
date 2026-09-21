@@ -17,9 +17,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -90,12 +96,15 @@ fun AchievementsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            TextButton(
+            IconButton(
                 onClick = {
                     onEvent(AchievementsEvent.Back)
                 }
             ) {
-                Text("Back")
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back"
+                )
             }
 
             Text(
@@ -217,6 +226,14 @@ fun AchievementGrid(
 fun AchievementCard(
     achievement: Achievement
 ) {
+    val progress =
+        if (achievement.targetProgress > 0) {
+            achievement.currentProgress.toFloat() /
+                    achievement.targetProgress.toFloat()
+        } else {
+            0f
+        }
+    val progressValue = progress.coerceIn(0f, 1f)
 
     val cardAlpha =
         if (achievement.isUnlocked) {
@@ -273,16 +290,44 @@ fun AchievementCard(
                 color =
                     MaterialTheme.colorScheme.onSurfaceVariant
             )
-
             Spacer(
                 modifier = Modifier.height(12.dp)
             )
 
+            LinearProgressIndicator(
+                progress = {
+                    progressValue
+                },
+                modifier = Modifier.fillMaxWidth(),
+                color =
+                    if (achievement.isUnlocked) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.secondary
+                    },
+                trackColor =
+                    MaterialTheme.colorScheme.surfaceVariant
+            )
+
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+
             Text(
-                text = "${achievement.currentProgress} / ${achievement.targetProgress}",
+                text =
+                    if (achievement.isUnlocked) {
+                        "Completed • ${achievement.currentProgress} / ${achievement.targetProgress}"
+                    } else {
+                        "${achievement.currentProgress} / ${achievement.targetProgress}"
+                    },
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary
+                color =
+                    if (achievement.isUnlocked) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
             )
 
             Spacer(
@@ -294,10 +339,10 @@ fun AchievementCard(
                     if (achievement.isUnlocked) {
                         "Unlocked"
                     } else {
-                        "Locked"
+                        "In Progress"
                     },
                 style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 color =
                     if (achievement.isUnlocked) {
                         MaterialTheme.colorScheme.primary

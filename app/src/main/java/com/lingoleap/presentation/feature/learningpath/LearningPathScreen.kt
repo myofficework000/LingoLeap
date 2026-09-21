@@ -1,6 +1,8 @@
 package com.lingoleap.presentation.feature.learningpath
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -19,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +30,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,6 +42,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lingoleap.domain.model.LearningPathNode
 import com.lingoleap.domain.model.LearningPathNodeState
+import kotlin.io.path.Path
+import kotlin.io.path.moveTo
 
 
 @Composable
@@ -44,6 +55,7 @@ fun LearningPathScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     when {
+
         state.isLoading -> {
             LearningPathLoading()
         }
@@ -99,6 +111,20 @@ fun LearningPathContent(
     onLessonClick: (String) -> Unit
 ) {
 
+    val completedCount =
+        nodes.count { node ->
+            node.state == LearningPathNodeState.COMPLETED
+        }
+
+    val totalCount = nodes.size
+
+    val progress =
+        if (totalCount > 0) {
+            completedCount.toFloat() / totalCount.toFloat()
+        } else {
+            0f
+        }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -112,6 +138,27 @@ fun LearningPathContent(
             text = "Learning Path",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+
+        Text(
+            text = "$completedCount of $totalCount lessons completed",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(
+            modifier = Modifier.height(10.dp)
+        )
+
+        LinearProgressIndicator(
+            progress = {
+                progress.coerceIn(0f, 1f)
+            },
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(
@@ -161,6 +208,9 @@ fun LearningPathItem(
 
     val alignStart = index % 2 == 0
 
+    // Every third lesson is shown as a checkpoint.
+    val isCheckpoint = (index + 1) % 3 == 0
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -172,16 +222,48 @@ fun LearningPathItem(
                     Arrangement.Start
                 } else {
                     Arrangement.End
-                }
+                },
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
-            LearningPathNodeCard(
-                node = node,
-                onLessonClick = onLessonClick
-            )
+            if (alignStart) {
+
+                LearningPathNodeCircle(
+                    node = node,
+                    isCheckpoint = isCheckpoint,
+                    onLessonClick = onLessonClick
+                )
+
+                Spacer(
+                    modifier = Modifier.width(12.dp)
+                )
+
+                LearningPathLessonInfo(
+                    node = node,
+                    isCheckpoint = isCheckpoint
+                )
+
+            } else {
+
+                LearningPathLessonInfo(
+                    node = node,
+                    isCheckpoint = isCheckpoint
+                )
+
+                Spacer(
+                    modifier = Modifier.width(12.dp)
+                )
+
+                LearningPathNodeCircle(
+                    node = node,
+                    isCheckpoint = isCheckpoint,
+                    onLessonClick = onLessonClick
+                )
+            }
         }
 
         if (!isLastItem) {
+
             LearningPathConnector(
                 alignStart = alignStart,
                 state = node.state
@@ -192,31 +274,138 @@ fun LearningPathItem(
 
 
 @Composable
-fun LearningPathNodeCard(
+fun LearningPathNodeCircle(
     node: LearningPathNode,
+    isCheckpoint: Boolean,
     onLessonClick: (String) -> Unit
 ) {
 
     val isLocked =
         node.state == LearningPathNodeState.LOCKED
 
+    val nodeSize =
+        when {
+
+            isCheckpoint -> {
+                112.dp
+            }
+
+            node.state == LearningPathNodeState.CURRENT -> {
+                100.dp
+            }
+
+            else -> {
+                84.dp
+            }
+        }
+
+    val borderWidth =
+        if (node.state == LearningPathNodeState.CURRENT) {
+            4.dp
+        } else {
+            0.dp
+        }
+
     val nodeAlpha =
         if (isLocked) {
-            0.45f
+            0.55f
         } else {
             1f
         }
 
-    Card(
+    Box(
         modifier = Modifier
-            .fillMaxWidth(0.72f)
+            .size(nodeSize)
             .alpha(nodeAlpha)
+            .border(
+                width = borderWidth,
+                color =
+                    if (node.state == LearningPathNodeState.CURRENT) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        Color.Transparent
+                    },
+                shape = CircleShape
+            )
+            .padding(
+                if (node.state == LearningPathNodeState.CURRENT) {
+                    6.dp
+                } else {
+                    0.dp
+                }
+            )
+            .background(
+                color =
+                    when (node.state) {
+
+                        LearningPathNodeState.COMPLETED ->
+                            MaterialTheme.colorScheme.primary
+
+                        LearningPathNodeState.CURRENT ->
+                            MaterialTheme.colorScheme.primaryContainer
+
+                        LearningPathNodeState.LOCKED ->
+                            MaterialTheme.colorScheme.outlineVariant
+                    },
+                shape = CircleShape
+            )
             .clickable(
                 enabled = !isLocked
             ) {
                 onLessonClick(node.lesson.id)
             },
-        shape = RoundedCornerShape(20.dp),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Text(
+            text =
+                when {
+
+                    isCheckpoint &&
+                            node.state == LearningPathNodeState.COMPLETED ->
+                        "🏆"
+
+                    isCheckpoint &&
+                            node.state == LearningPathNodeState.CURRENT ->
+                        "⭐"
+
+                    isCheckpoint &&
+                            node.state == LearningPathNodeState.LOCKED ->
+                        "🔒"
+
+                    node.state == LearningPathNodeState.COMPLETED ->
+                        "✓"
+
+                    node.state == LearningPathNodeState.CURRENT ->
+                        "▶"
+
+                    else ->
+                        "🔒"
+                },
+            style =
+                if (
+                    isCheckpoint ||
+                    node.state == LearningPathNodeState.CURRENT
+                ) {
+                    MaterialTheme.typography.headlineLarge
+                } else {
+                    MaterialTheme.typography.headlineMedium
+                },
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+
+@Composable
+fun LearningPathLessonInfo(
+    node: LearningPathNode,
+    isCheckpoint: Boolean
+) {
+
+    Card(
+        modifier = Modifier.fillMaxWidth(0.62f),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor =
                 when (node.state) {
@@ -234,25 +423,27 @@ fun LearningPathNodeCard(
     ) {
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.padding(16.dp)
         ) {
 
-            LearningPathBadge(
-                state = node.state
-            )
+            if (isCheckpoint) {
 
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
+                Text(
+                    text = "CHECKPOINT",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(
+                    modifier = Modifier.height(4.dp)
+                )
+            }
 
             Text(
                 text = node.lesson.title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(
@@ -267,62 +458,23 @@ fun LearningPathNodeCard(
                             "Completed"
 
                         LearningPathNodeState.CURRENT ->
-                            "Start lesson"
+                            if (isCheckpoint) {
+                                "Current checkpoint"
+                            } else {
+                                "Current lesson"
+                            }
 
                         LearningPathNodeState.LOCKED ->
-                            "Complete previous lesson first"
+                            if (isCheckpoint) {
+                                "Checkpoint locked"
+                            } else {
+                                "Locked"
+                            }
                     },
                 style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-    }
-}
-
-
-@Composable
-fun LearningPathBadge(
-    state: LearningPathNodeState
-) {
-
-    Box(
-        modifier = Modifier
-            .size(64.dp)
-            .background(
-                color =
-                    when (state) {
-
-                        LearningPathNodeState.COMPLETED ->
-                            MaterialTheme.colorScheme.secondary
-
-                        LearningPathNodeState.CURRENT ->
-                            MaterialTheme.colorScheme.primary
-
-                        LearningPathNodeState.LOCKED ->
-                            MaterialTheme.colorScheme.outlineVariant
-                    },
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-
-        Text(
-            text =
-                when (state) {
-
-                    LearningPathNodeState.COMPLETED ->
-                        "✓"
-
-                    LearningPathNodeState.CURRENT ->
-                        "▶"
-
-                    LearningPathNodeState.LOCKED ->
-                        "🔒"
-                },
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 
@@ -333,37 +485,62 @@ fun LearningPathConnector(
     state: LearningPathNodeState
 ) {
 
-    Row(
+    val connectorColor =
+        if (state == LearningPathNodeState.COMPLETED) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.outlineVariant
+        }
+
+    Canvas(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp),
-        horizontalArrangement =
-            if (alignStart) {
-                Arrangement.Start
-            } else {
-                Arrangement.End
-            }
+            .height(90.dp)
     ) {
 
-        Box(
-            modifier = Modifier
-                .padding(
-                    start = if (alignStart) 85.dp else 0.dp,
-                    end = if (alignStart) 0.dp else 85.dp
-                )
-                .size(
-                    width = 4.dp,
-                    height = 48.dp
-                )
-                .background(
-                    color =
-                        if (state == LearningPathNodeState.COMPLETED) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.outlineVariant
-                        },
-                    shape = RoundedCornerShape(2.dp)
-                )
+        val startX =
+            if (alignStart) {
+                size.width * 0.18f
+            } else {
+                size.width * 0.82f
+            }
+
+        val endX =
+            if (alignStart) {
+                size.width * 0.82f
+            } else {
+                size.width * 0.18f
+            }
+
+        val startY = 0f
+        val endY = size.height
+
+        val path = Path().apply {
+
+            moveTo(
+                x = startX,
+                y = startY
+            )
+
+            cubicTo(
+                x1 = startX,
+                y1 = size.height * 0.35f,
+
+                x2 = endX,
+                y2 = size.height * 0.65f,
+
+                x3 = endX,
+                y3 = endY
+            )
+        }
+
+        drawPath(
+            path = path,
+            color = connectorColor,
+            style = Stroke(
+                width = 8f,
+                cap = StrokeCap.Round
+            )
         )
     }
 }
