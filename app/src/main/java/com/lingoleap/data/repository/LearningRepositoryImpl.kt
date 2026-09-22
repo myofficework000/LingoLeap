@@ -2,9 +2,11 @@ package com.lingoleap.data.repository
 
 import com.lingoleap.data.local.LearningCatalogDataSource
 import com.lingoleap.data.local.DailyChallengeDataSource
+import com.lingoleap.data.local.AchievementCatalogDataSource
 import com.lingoleap.data.local.progress.ProgressLocalDataSource
 import com.lingoleap.domain.model.Course
 import com.lingoleap.domain.model.DailyChallenge
+import com.lingoleap.domain.model.AchievementDefinition
 import com.lingoleap.domain.model.Language
 import com.lingoleap.domain.model.LanguagePair
 import com.lingoleap.domain.model.LearnerProgress
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class LearningRepositoryImpl @Inject constructor(
     private val source: LearningCatalogDataSource,
     private val dailyChallengeSource: DailyChallengeDataSource,
+    private val achievementCatalogSource: AchievementCatalogDataSource,
     private val progressSource: ProgressLocalDataSource,
 ) : LearningRepository {
     override suspend fun getLanguages(): List<Language> = source.languages()
@@ -24,7 +27,35 @@ class LearningRepositoryImpl @Inject constructor(
     override suspend fun getCourses(): List<Course> = source.courses()
     override suspend fun getQuizzes(lessonId: String): List<Quiz> =
         source.quizzes(lessonId)
-    override suspend fun getDailyChallenges(): List<DailyChallenge> = dailyChallengeSource.challenges()
+    override suspend fun getDailyChallenges(): List<DailyChallenge> {
+        val progress = getProgress()
+        val activePairId = progress.activeCourseId.removePrefix("course-")
+        return dailyChallengeSource.challenges().filter { challenge ->
+            challenge.lessonId.startsWith("$activePairId-") &&
+                challenge.id !in progress.completedDailyChallengeIds
+        }
+    }
+    override suspend fun getAchievementDefinitions(): List<AchievementDefinition> =
+        achievementCatalogSource.definitions()
+    override suspend fun setActiveLanguagePair(languagePairId: String): LearnerProgress {
+        val course = source.courses().firstOrNull { it.languagePairId == languagePairId }
+            ?: return getProgress()
+        val updated = getProgress().copy(activeCourseId = course.id)
+        progressSource.save(updated)
+        return updated
+    }
+    override suspend fun completeDailyChallenge(challengeId: String): LearnerProgress {
+        val challenge = dailyChallengeSource.challenges().firstOrNull { it.id == challengeId }
+            ?: return getProgress()
+        val current = getProgress()
+        if (challengeId in current.completedDailyChallengeIds) return current
+        val updated = current.copy(
+            completedDailyChallengeIds = current.completedDailyChallengeIds + challengeId,
+            xp = current.xp + challenge.xpReward,
+        )
+        progressSource.save(updated)
+        return updated
+    }
     override suspend fun getProgress(): LearnerProgress = progressSource.get() ?: source.progress().let { defaultProgress ->
         progressSource.save(defaultProgress)
         defaultProgress

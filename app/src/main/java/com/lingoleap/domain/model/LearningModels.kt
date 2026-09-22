@@ -53,6 +53,7 @@ data class DailyChallenge(
 data class LearnerProgress(
     val activeCourseId: String,
     val completedLessonIds: Set<String>,
+    val completedDailyChallengeIds: Set<String> = emptySet(),
     val streakDays: Int,
     val xp: Int
 )
@@ -69,6 +70,14 @@ data class Achievement(
     val title: String,
     val description: String,
     val isUnlocked: Boolean,
+)
+
+data class AchievementDefinition(
+    val id: String,
+    val title: String,
+    val description: String,
+    val metric: String,
+    val target: Int,
 )
 
 enum class LearningPathNodeState { COMPLETED, CURRENT, LOCKED }

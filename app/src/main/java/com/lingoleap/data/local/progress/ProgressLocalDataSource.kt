@@ -15,6 +15,7 @@ class ProgressLocalDataSource @Inject constructor(private val dao: ProgressDao) 
 private fun ProgressEntity.toDomain() = LearnerProgress(
     activeCourseId = activeCourseId,
     completedLessonIds = completedLessonIdsCsv.split(',').filter { it.isNotBlank() }.toSet(),
+    completedDailyChallengeIds = completedDailyChallengeIdsCsv.split(',').filter { it.isNotBlank() }.toSet(),
     streakDays = streakDays,
     xp = xp,
 )
@@ -22,6 +23,7 @@ private fun ProgressEntity.toDomain() = LearnerProgress(
 private fun LearnerProgress.toEntity() = ProgressEntity(
     activeCourseId = activeCourseId,
     completedLessonIdsCsv = completedLessonIds.sorted().joinToString(","),
+    completedDailyChallengeIdsCsv = completedDailyChallengeIds.sorted().joinToString(","),
     streakDays = streakDays,
     xp = xp,
 )

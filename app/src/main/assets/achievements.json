@@ -1,0 +1,9 @@
+[
+  {"id":"first_lesson","title":"First Step","description":"Complete your first lesson.","metric":"completed_lessons","target":1},
+  {"id":"five_lessons","title":"Curious Learner","description":"Complete five lessons.","metric":"completed_lessons","target":5},
+  {"id":"three_day_streak","title":"On a Roll","description":"Learn for three days in a row.","metric":"streak_days","target":3},
+  {"id":"seven_day_streak","title":"Week Warrior","description":"Learn for seven days in a row.","metric":"streak_days","target":7},
+  {"id":"xp_100","title":"Century","description":"Earn 100 experience points.","metric":"xp","target":100},
+  {"id":"xp_500","title":"Rising Star","description":"Earn 500 experience points.","metric":"xp","target":500},
+  {"id":"daily_challenges_3","title":"Daily Momentum","description":"Complete three offline daily challenges.","metric":"daily_challenges","target":3}
+]

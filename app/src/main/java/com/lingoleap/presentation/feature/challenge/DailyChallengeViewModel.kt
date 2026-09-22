@@ -3,6 +3,7 @@ package com.lingoleap.presentation.feature.challenge
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingoleap.domain.usecase.GetDailyChallengesUseCase
+import com.lingoleap.domain.usecase.CompleteDailyChallengeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,7 @@ sealed interface DailyChallengeEffect {
 @HiltViewModel
 class DailyChallengeViewModel @Inject constructor(
     private val getDailyChallenges: GetDailyChallengesUseCase,
+    private val completeDailyChallenge: CompleteDailyChallengeUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(DailyChallengeState())
     val state = _state.asStateFlow()
@@ -57,10 +59,15 @@ class DailyChallengeViewModel @Inject constructor(
 
     private fun nextChallenge() {
         if (_state.value.selectedAnswer == null) return
-        if (_state.value.isLastChallenge) {
-            viewModelScope.launch { _effect.send(DailyChallengeEffect.Finished) }
-        } else {
-            _state.update { it.copy(currentIndex = it.currentIndex + 1, selectedAnswer = null, isAnswerCorrect = null) }
+        viewModelScope.launch {
+            val state = _state.value
+            val challenge = state.currentChallenge ?: return@launch
+            if (state.isAnswerCorrect == true) completeDailyChallenge(challenge.id)
+            if (state.isLastChallenge) {
+                _effect.send(DailyChallengeEffect.Finished)
+            } else {
+                _state.update { it.copy(currentIndex = it.currentIndex + 1, selectedAnswer = null, isAnswerCorrect = null) }
+            }
         }
     }
 }

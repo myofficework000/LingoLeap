@@ -136,7 +136,7 @@ private fun Lesson.toQuizzes(): List<Quiz> {
                 "Choose the correct meaning of ${word.sourceText}",
             choices = words
                 .map { it.targetText }
-                .shuffled(),
+                .let { answers -> answers.drop(index) + answers.take(index) },
             correctAnswer = word.targetText
         )
     }

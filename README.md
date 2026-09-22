@@ -32,6 +32,8 @@ LingoLeap is a buildable Android app for short, game-like Indian-language learni
 
 ## Architecture
 
+The product roadmap and the Firebase boundary are documented in [Offline-first plan](docs/OFFLINE_FIRST_PLAN.md). Learning content stays bundled and functional without a connection; Firebase is reserved for optional user backup and release operations.
+
 ```text
 app/src/main/java/com/lingoleap
 ├── core/mvi                 # UiState, UiEvent and UiEffect markers

@@ -24,7 +24,9 @@ object StorageModule {
 
     @Provides @Singleton
     fun provideDatabase(@ApplicationContext context: Context): LingoLeapDatabase =
-        Room.databaseBuilder(context, LingoLeapDatabase::class.java, "lingoleap.db").fallbackToDestructiveMigration(dropAllTables = true).build()
+        Room.databaseBuilder(context, LingoLeapDatabase::class.java, "lingoleap.db")
+            .addMigrations(LingoLeapDatabase.MIGRATION_1_2)
+            .build()
 
     @Provides fun provideProgressDao(database: LingoLeapDatabase): ProgressDao = database.progressDao()
 }
