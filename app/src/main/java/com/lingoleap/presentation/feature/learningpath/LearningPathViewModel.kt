@@ -13,77 +13,98 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 data class LearningPathState(
     val nodes: List<LearningPathNode> = emptyList(),
     val isLoading: Boolean = true
 )
 
+
 @HiltViewModel
 class LearningPathViewModel @Inject constructor(
     private val getCourses: GetCoursesUseCase,
-    private val observeProgress: ObserveLearnerProgressUseCase,
+    private val observeProgress: ObserveLearnerProgressUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(
-        LearningPathState()
-    )
+    private val _state =
+        MutableStateFlow(
+            LearningPathState()
+        )
 
-    val state = _state.asStateFlow()
+    val state =
+        _state.asStateFlow()
+
 
     init {
         observeLearningPath()
     }
 
+
     private fun observeLearningPath() {
 
         viewModelScope.launch {
-
             val courses = getCourses()
 
-            observeProgress().collect { progress ->
+            observeProgress()
+                .collect { progress ->
 
-                val lessons = courses
-                    .firstOrNull { course ->
-                        course.id == progress.activeCourseId
+                    val activeCourse =
+                        courses.firstOrNull { course ->
+                            course.id ==
+                                    progress.activeCourseId
+                        }
+
+                    val lessons =
+                        activeCourse
+                            ?.lessons
+                            .orEmpty()
+
+                    val nodes =
+                        lessons.mapIndexed { index, lesson ->
+
+                            val previousLessons =
+                                lessons.take(index)
+
+                            val nodeState =
+                                when {
+
+                                    lesson.id in
+                                            progress.completedLessonIds -> {
+
+                                        LearningPathNodeState.COMPLETED
+                                    }
+
+                                    previousLessons.all { previousLesson ->
+
+                                        previousLesson.id in
+                                                progress.completedLessonIds
+
+                                    } -> {
+
+                                        LearningPathNodeState.CURRENT
+                                    }
+
+                                    else -> {
+
+                                        LearningPathNodeState.LOCKED
+                                    }
+                                }
+
+                            LearningPathNode(
+                                lesson = lesson,
+                                state = nodeState
+                            )
+                        }
+
+
+                    _state.update { currentState ->
+
+                        currentState.copy(
+                            nodes = nodes,
+                            isLoading = false
+                        )
                     }
-                    ?.lessons
-                    .orEmpty()
-
-                val nodes = lessons.map { lesson ->
-
-                    val nodeState = when {
-
-                        lesson.id in progress.completedLessonIds -> {
-                            LearningPathNodeState.COMPLETED
-                        }
-
-                        lessons
-                            .take(lesson.order - 1)
-                            .all { previousLesson ->
-                                previousLesson.id in progress.completedLessonIds
-                            } -> {
-                            LearningPathNodeState.CURRENT
-                        }
-
-                        else -> {
-                            LearningPathNodeState.LOCKED
-                        }
-                    }
-
-                    LearningPathNode(
-                        lesson = lesson,
-                        state = nodeState
-                    )
                 }
-
-                _state.update { currentState ->
-
-                    currentState.copy(
-                        nodes = nodes,
-                        isLoading = false
-                    )
-                }
-            }
         }
     }
 }

@@ -14,52 +14,119 @@ import javax.inject.Inject
 @HiltViewModel
 class QuizViewModel @Inject constructor(
     private val getLessonQuizUseCase: GetLessonQuizUseCase
-): ViewModel() {
+) : ViewModel() {
 
-    private val _quizState = MutableStateFlow(QuizState())
-    val quizState : StateFlow<QuizState> = _quizState.asStateFlow()
+    private val _quizState =
+        MutableStateFlow(QuizState())
 
-    fun loadQuiz(lessonId: String){
+    val quizState: StateFlow<QuizState> =
+        _quizState.asStateFlow()
+
+    fun loadQuiz(lessonId: String) {
         viewModelScope.launch {
 
-            val quiz = getLessonQuizUseCase(lessonId)
-            _quizState.update { currentState ->
-                currentState.copy(
-                    quiz = quiz,
+            val quizzes =
+                getLessonQuizUseCase(lessonId)
+
+            _quizState.update {
+                it.copy(
+                    quizzes = quizzes,
+                    currentQuestionIndex = 0,
                     selectedAnswer = null,
-                    isAnswerChecked = false
+                    isAnswerChecked = false,
+                    score = 0,
+                    isQuizCompleted = false
                 )
             }
         }
     }
 
-    fun onEvent(event: QuizEvent){
-        when(event){
-            is QuizEvent.SelectAnswer -> {
-                _quizState.update { currentState ->
-                    currentState.copy(
-                        selectedAnswer = event.answer
-                    )
-                }
-            }
+    fun onEvent(event: QuizEvent) {
 
-            is QuizEvent.CheckAnswer -> {
-                if (_quizState.value.selectedAnswer != null) {
-                    _quizState.update { currentState ->
-                        currentState.copy(
-                            isAnswerChecked = true
+        when (event) {
+
+            is QuizEvent.SelectAnswer -> {
+                if (!_quizState.value.isAnswerChecked) {
+                    _quizState.update {
+                        it.copy(
+                            selectedAnswer = event.answer
                         )
                     }
                 }
             }
 
-            is QuizEvent.Next -> {
-                _quizState.update { currentState ->
-                    currentState.copy(
-                        selectedAnswer = null,
-                        isAnswerChecked = false
-                    )
-                }
+            QuizEvent.CheckAnswer -> {
+                checkAnswer()
+            }
+
+            QuizEvent.Next -> {
+                moveToNextQuestion()
+            }
+        }
+    }
+
+    private fun checkAnswer() {
+
+        val state = _quizState.value
+
+        if (state.isAnswerChecked) {
+            return
+        }
+
+        val currentQuiz =
+            state.quizzes.getOrNull(
+                state.currentQuestionIndex
+            ) ?: return
+
+        val selectedAnswer =
+            state.selectedAnswer ?: return
+
+        val isCorrect =
+            selectedAnswer ==
+                    currentQuiz.correctAnswer
+
+        _quizState.update {
+            it.copy(
+                isAnswerChecked = true,
+                score =
+                    if (isCorrect) {
+                        it.score + 1
+                    } else {
+                        it.score
+                    }
+            )
+        }
+    }
+
+    private fun moveToNextQuestion() {
+
+        val state = _quizState.value
+
+        if (!state.isAnswerChecked) {
+            return
+        }
+
+        val isLastQuestion =
+            state.currentQuestionIndex ==
+                    state.quizzes.lastIndex
+
+        if (isLastQuestion) {
+
+            _quizState.update {
+                it.copy(
+                    isQuizCompleted = true
+                )
+            }
+
+        } else {
+
+            _quizState.update {
+                it.copy(
+                    currentQuestionIndex =
+                        it.currentQuestionIndex + 1,
+                    selectedAnswer = null,
+                    isAnswerChecked = false
+                )
             }
         }
     }
