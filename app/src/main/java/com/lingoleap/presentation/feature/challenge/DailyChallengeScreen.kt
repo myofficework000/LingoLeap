@@ -96,7 +96,7 @@ fun DailyChallengeScreen(
             when {
                 state.isLoading -> Text("Loading today’s challenges…")
                 state.error != null -> Text(state.error, color = MaterialTheme.colorScheme.error)
-                state.currentChallenge == null -> Text("No daily challenges are available yet.")
+                state.currentChallenge == null -> Text("Today’s challenge is complete. Come back tomorrow for a new review.")
                 else -> ChallengeQuestion(state = state, onEvent = onEvent)
             }
         }

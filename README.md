@@ -32,6 +32,8 @@ LingoLeap is a buildable Android app for short, game-like Indian-language learni
 
 ## Architecture
 
+The product roadmap and the Firebase boundary are documented in [Offline-first plan](docs/OFFLINE_FIRST_PLAN.md). Learning content stays bundled and functional without a connection; Firebase is reserved for optional user backup and release operations.
+
 ```text
 app/src/main/java/com/lingoleap
 ├── core/mvi                 # UiState, UiEvent and UiEffect markers
@@ -76,6 +78,24 @@ Each student should only edit their two feature folders plus tests. Shared chang
 | Sriteja | Lesson player, audio pronunciation | Add real word paging, progress saving, and an audio abstraction with accessibility labels. |
 | Tiru | Practice modes, quiz feedback | Complete listening/fill-blank modes, answer feedback effects, and unit tests for scoring. |
 | Dhyan | Achievements, gamified learning map | Implement the gallery and path-map UI backed by progress milestones. |
+
+## Next ownership — offline-first functional sprint
+
+This sprint makes the learning loop complete without an account or network. Each candidate owns two deliverables and works only in the listed feature/data areas. Shared navigation, Room, DI, or model changes require a small proposal/PR first; Candidate D is the integration owner for those files.
+
+| Candidate | Two owned deliverables | Primary scope | Branch and acceptance criteria |
+|---|---|---|---|
+| Candidate A | 1. Active-course and resume experience<br>2. Lesson recap and retry | `feature/language`, `feature/home`, `feature/lesson` | `feature/offline-course-resume` — changing the language pair changes Home/Lessons immediately; recap shows learned words and can reopen an incomplete lesson. |
+| Candidate B | 1. Offline curriculum expansion<br>2. Pronunciation fallback | `assets/learning_catalog.json`, `learning_catalog.schema.json`, `feature/lesson`, lesson-content tests | `feature/offline-content-packs` — add themed units (family, food, travel, directions, work, conversations) with stable IDs; every word has source/target text and text-to-speech still works without downloaded audio. |
+| Candidate C | 1. Practice mastery flow<br>2. Daily challenge quality | `feature/practice`, `feature/quiz`, `feature/challenge`, `assets/daily_challenges.json` | `feature/offline-practice-master` — deterministic scoring, retry-incorrect mode, clear completion feedback, and daily challenge progress/XP cannot be awarded twice. |
+| Candidate D | 1. Offline progress and achievement dashboard<br>2. Settings and backup consent | `feature/progress`, `feature/learningpath`, `feature/profile`, `docs/`, Room migration tests | `feature/offline-progress-settings` — charts/path/achievements use persisted Room data; add a local export/reset flow and a disabled-by-default “Back up with Firebase” consent entry. |
+
+### Shared integration contract
+
+- Candidate B owns curriculum JSON and schema changes; Candidate C owns daily-challenge JSON; Candidate D owns achievement JSON and Room migrations.
+- Keep content IDs immutable after merge. Use a new ID for replacement content so existing offline progress remains valid.
+- Every branch must pass `./gradlew testDebugUnitTest assembleDebug`, validate edited JSON with `jq empty`, and include at least one focused unit test for new scoring, mapping, or migration behavior.
+- Firebase SDK/configuration is out of this sprint. The app must remain fully functional in airplane mode; Firebase is only a later, opt-in progress backup.
 
 ## Recommended delivery order
 

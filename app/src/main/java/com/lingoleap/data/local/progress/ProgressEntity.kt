@@ -8,6 +8,7 @@ data class ProgressEntity(
     @PrimaryKey val id: Int = SINGLETON_ID,
     val activeCourseId: String,
     val completedLessonIdsCsv: String,
+    val completedDailyChallengeIdsCsv: String,
     val streakDays: Int,
     val xp: Int,
 ) {

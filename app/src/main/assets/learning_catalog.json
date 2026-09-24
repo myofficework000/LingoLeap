@@ -106,5 +106,5 @@
       {"key":"people","title":"People and polite phrases","titleNative":"जनाः विनयशब्दाश्च","words":[{"english":"I","native":"अहम्","transliteration":"aham"},{"english":"You","native":"भवान्","transliteration":"bhavaan"},{"english":"Friend","native":"मित्रम्","transliteration":"mitram"},{"english":"Please","native":"कृपया","transliteration":"kripaya"}]}
     ]}
   ],
-  "progress": {"activeCourseId":"course-en-hi","completedLessonIds":["en-hi-greetings"],"streakDays":5,"xp":120}
+  "progress": {"activeCourseId":"course-en-hi","completedLessonIds":["en-hi-greetings"],"completedDailyChallengeIds":[],"streakDays":5,"xp":120}
 }

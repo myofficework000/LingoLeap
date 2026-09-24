@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.lingoleap.domain.usecase.GetLanguagePairsUseCase
 import com.lingoleap.domain.usecase.GetSupportedLanguagesUseCase
 import com.lingoleap.domain.usecase.SaveLanguagePairUseCase
+import com.lingoleap.domain.usecase.SetActiveLanguagePairUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.async
@@ -23,6 +24,7 @@ class LanguagePickerViewModel @Inject constructor(
     private val getSupportedLanguagesUseCase: GetSupportedLanguagesUseCase,
     private val getLanguagePairsUseCase: GetLanguagePairsUseCase,
     private val saveLanguagePair: SaveLanguagePairUseCase,
+    private val setActiveLanguagePair: SetActiveLanguagePairUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LanguagePickerState())
@@ -84,6 +86,7 @@ class LanguagePickerViewModel @Inject constructor(
                 } ?: return
                 viewModelScope.launch {
                     saveLanguagePair(sourceId, targetId, pair.id)
+                    setActiveLanguagePair(pair.id)
                     _effect.send(LanguagePickerEffect.Confirmed)
                 }
             }
