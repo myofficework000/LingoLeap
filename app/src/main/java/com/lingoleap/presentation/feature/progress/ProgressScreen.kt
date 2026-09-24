@@ -44,6 +44,8 @@ data class ProgressState(
 
 sealed interface ProgressEvent : UiEvent {
     data object Refresh : ProgressEvent;
+
+    data object OpenLearningPath : ProgressEvent
     data object OpenAchievements : ProgressEvent
 
     data class SelectRange(val range: ProgressRange): ProgressEvent
@@ -118,6 +120,28 @@ sealed interface ProgressEvent : UiEvent {
             Text(
                 text = "View Achievements",
                 modifier = Modifier.padding(vertical = 6.dp)
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+        Button(
+            onClick = {
+                onEvent(
+                    ProgressEvent.OpenLearningPath
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp)
+        ) {
+
+            Text(
+                text = "View Learning Path",
+                modifier = Modifier.padding(
+                    vertical = 6.dp
+                )
             )
         }
     }

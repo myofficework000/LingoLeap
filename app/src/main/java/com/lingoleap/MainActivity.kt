@@ -18,10 +18,10 @@ import com.lingoleap.presentation.feature.home.HomeEvent
 import com.lingoleap.presentation.feature.home.HomeScreen
 import com.lingoleap.presentation.feature.challenge.DailyChallengeRoute
 import com.lingoleap.presentation.feature.language.LanguagePickerRoute
+import com.lingoleap.presentation.feature.learningpath.LearningPathScreen
 import com.lingoleap.presentation.feature.lesson.LessonRoute
 import com.lingoleap.presentation.feature.lesson.LessonsListEvent
 import com.lingoleap.presentation.feature.lesson.LessonsListScreen
-import com.lingoleap.presentation.feature.learningpath.LearningPathRoute
 import com.lingoleap.presentation.feature.onboarding.OnboardingRoute
 import com.lingoleap.presentation.feature.practice.PracticeRoute
 import com.lingoleap.presentation.feature.splash.SplashRoute
@@ -167,7 +167,25 @@ private fun LingoLeapApp() {
                 val viewModel: ProgressViewModel = hiltViewModel()
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 LaunchedEffect(viewModel) {
-                    viewModel.effect.collectLatest { if (it is ProgressEffect.NavigateToAchievements) navController.navigate(LingoRoute.Achievements.path) }
+                    viewModel.effect.collectLatest { effect ->
+
+                        when (effect) {
+
+                            ProgressEffect.NavigateToAchievements -> {
+
+                                navController.navigate(
+                                    LingoRoute.Achievements.path
+                                )
+                            }
+
+                            ProgressEffect.NavigateToLearningPath -> {
+
+                                navController.navigate(
+                                    LingoRoute.LearningPath.path
+                                )
+                            }
+                        }
+                    }
                 }
                 ProgressScreen(state = state, onEvent = viewModel::onEvent)
             }
@@ -187,6 +205,19 @@ private fun LingoLeapApp() {
                 }
                 ProfileScreen(state = state, onEvent = viewModel::onEvent)
             }
+
+            composable(LingoRoute.LearningPath.path) {
+
+                LearningPathScreen(
+                    onLessonClick = { lessonId ->
+
+                        navController.navigate(
+                            LingoRoute.Lesson.create(lessonId)
+                        )
+                    }
+                )
+            }
+
             composable(LingoRoute.Achievements.path) { AchievementsScreen(onEvent = { navController.popBackStack() }) }
             composable(LingoRoute.DailyChallenge.path) {
                 DailyChallengeRoute(
@@ -194,12 +225,7 @@ private fun LingoLeapApp() {
                     onFinished = { navController.navigate(LingoRoute.Home.path) { popUpTo(LingoRoute.Home.path) { inclusive = false } } },
                 )
             }
-            composable(LingoRoute.LearningPath.path) {
-                LearningPathRoute(
-                    onBack = { navController.popBackStack() },
-                    onOpenLesson = { lessonId -> navController.navigate(LingoRoute.Lesson.create(lessonId)) },
-                )
-            }
         }
     }
 }
+

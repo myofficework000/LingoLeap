@@ -9,7 +9,13 @@ import org.junit.Test
 class AchievementRulesTest {
     @Test fun `unlocks achievements from progress milestones`() {
         val achievements = AchievementRules.evaluate(
-            LearnerProgress("course", setOf("lesson-1"), streakDays = 7, xp = 100),
+            LearnerProgress(
+                activeCourseId = "course",
+                completedLessonIds = (1..10).map { "lesson-$it" }.toSet(),
+                completedDailyChallengeIds = (1..3).map { "challenge-$it" }.toSet(),
+                streakDays = 14,
+                xp = 500,
+            ),
         )
         assertTrue(achievements.all { it.isUnlocked })
     }
