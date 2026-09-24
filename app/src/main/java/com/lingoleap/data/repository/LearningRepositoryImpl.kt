@@ -71,4 +71,20 @@ class LearningRepositoryImpl @Inject constructor(
             updated
         }
     }
+    override suspend fun addReviewWord(wordId: String): LearnerProgress {
+        val updated = getProgress().let { it.copy(reviewWordIds = it.reviewWordIds + wordId) }
+        progressSource.save(updated)
+        return updated
+    }
+    override suspend fun removeReviewWord(wordId: String): LearnerProgress {
+        val updated = getProgress().let { it.copy(reviewWordIds = it.reviewWordIds - wordId) }
+        progressSource.save(updated)
+        return updated
+    }
+    override suspend fun resetProgress(): LearnerProgress {
+        val activeCourseId = getProgress().activeCourseId
+        val reset = source.progress().copy(activeCourseId = activeCourseId, completedLessonIds = emptySet(), completedDailyChallengeIds = emptySet(), reviewWordIds = emptySet(), streakDays = 0, xp = 0)
+        progressSource.save(reset)
+        return reset
+    }
 }

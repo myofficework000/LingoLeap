@@ -161,6 +161,16 @@ private fun HomeContent(
                 )
             }
 
+            Spacer(modifier = Modifier.height(12.dp))
+
+            FeatureCard(
+                title = "Review mistakes",
+                subtitle = "Revisit quiz words you missed",
+                icon = Icons.Default.CheckCircle,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { onEvent(HomeEvent.Review) }
+            )
+
             Spacer(modifier = Modifier.height(24.dp))
 
             MotivationCard(

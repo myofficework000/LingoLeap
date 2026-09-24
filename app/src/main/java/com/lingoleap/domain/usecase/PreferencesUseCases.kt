@@ -18,6 +18,9 @@ class SaveLanguagePairUseCase @Inject constructor(private val repository: UserPr
 class SetActiveLanguagePairUseCase @Inject constructor(private val repository: LearningRepository) {
     suspend operator fun invoke(languagePairId: String) = repository.setActiveLanguagePair(languagePairId)
 }
+class SaveDailyGoalUseCase @Inject constructor(private val repository: UserPreferencesRepository) {
+    suspend operator fun invoke(lessons: Int) = repository.saveDailyGoal(lessons)
+}
 class ClearUserPreferencesUseCase @Inject constructor(private val repository: UserPreferencesRepository) {
     suspend operator fun invoke() = repository.clear()
 }

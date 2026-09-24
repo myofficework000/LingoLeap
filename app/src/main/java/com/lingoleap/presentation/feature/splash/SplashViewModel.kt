@@ -49,6 +49,9 @@ class SplashViewModel @Inject constructor(
                 preferences.activeLanguagePairId == null ->
                     LingoRoute.LanguagePicker.path
 
+                preferences.dailyGoalLessons == null ->
+                    LingoRoute.GoalSetup.path
+
                 else ->
                     LingoRoute.Home.path
             }

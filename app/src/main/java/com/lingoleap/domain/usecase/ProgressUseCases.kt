@@ -19,6 +19,9 @@ class CompleteLessonUseCase @Inject constructor(private val repository: Learning
 class CompleteDailyChallengeUseCase @Inject constructor(private val repository: LearningRepository) {
     suspend operator fun invoke(challengeId: String): LearnerProgress = repository.completeDailyChallenge(challengeId)
 }
+class AddReviewWordUseCase @Inject constructor(private val repository: LearningRepository) { suspend operator fun invoke(wordId: String) = repository.addReviewWord(wordId) }
+class RemoveReviewWordUseCase @Inject constructor(private val repository: LearningRepository) { suspend operator fun invoke(wordId: String) = repository.removeReviewWord(wordId) }
+class ResetLearningProgressUseCase @Inject constructor(private val repository: LearningRepository) { suspend operator fun invoke() = repository.resetProgress() }
 class GetAchievementsUseCase @Inject constructor(private val repository: LearningRepository) {
     suspend operator fun invoke(): List<Achievement> = AchievementRules.evaluate(
         progress = repository.getProgress(),

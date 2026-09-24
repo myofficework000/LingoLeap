@@ -3,6 +3,7 @@ package com.lingoleap.presentation.feature.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lingoleap.domain.usecase.GetLessonQuizUseCase
+import com.lingoleap.domain.usecase.AddReviewWordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
-    private val getLessonQuizUseCase: GetLessonQuizUseCase
+    private val getLessonQuizUseCase: GetLessonQuizUseCase,
+    private val addReviewWord: AddReviewWordUseCase,
 ) : ViewModel() {
 
     private val _quizState =
@@ -95,6 +97,9 @@ class QuizViewModel @Inject constructor(
                         it.score
                     }
             )
+        }
+        if (!isCorrect) {
+            viewModelScope.launch { addReviewWord("${currentQuiz.lessonId}-${state.currentQuestionIndex + 1}") }
         }
     }
 

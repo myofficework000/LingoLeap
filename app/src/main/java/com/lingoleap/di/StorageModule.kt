@@ -26,6 +26,7 @@ object StorageModule {
     fun provideDatabase(@ApplicationContext context: Context): LingoLeapDatabase =
         Room.databaseBuilder(context, LingoLeapDatabase::class.java, "lingoleap.db")
             .addMigrations(LingoLeapDatabase.MIGRATION_1_2)
+            .addMigrations(LingoLeapDatabase.MIGRATION_2_3)
             .build()
 
     @Provides fun provideProgressDao(database: LingoLeapDatabase): ProgressDao = database.progressDao()

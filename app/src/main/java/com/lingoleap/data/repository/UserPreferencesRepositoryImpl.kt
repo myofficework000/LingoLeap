@@ -11,5 +11,6 @@ class UserPreferencesRepositoryImpl @Inject constructor(private val source: Pref
     override suspend fun completeOnboarding() { source.completeOnboarding() }
     override suspend fun saveLanguagePair(sourceLanguageId: String, targetLanguageId: String, pairId: String) =
         source.saveLanguagePair(sourceLanguageId, targetLanguageId, pairId)
+    override suspend fun saveDailyGoal(lessons: Int) = source.saveDailyGoal(lessons)
     override suspend fun clear() { source.clear() }
 }

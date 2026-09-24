@@ -19,6 +19,7 @@ class PreferencesDataSource @Inject constructor(private val dataStore: DataStore
             sourceLanguageId = values[SOURCE_LANGUAGE],
             targetLanguageId = values[TARGET_LANGUAGE],
             activeLanguagePairId = values[LANGUAGE_PAIR],
+            dailyGoalLessons = values[DAILY_GOAL_LESSONS]?.toIntOrNull(),
         )
     }
 
@@ -31,6 +32,9 @@ class PreferencesDataSource @Inject constructor(private val dataStore: DataStore
             it[LANGUAGE_PAIR] = pairId
         }
     }
+    suspend fun saveDailyGoal(lessons: Int) {
+        dataStore.edit { it[DAILY_GOAL_LESSONS] = lessons.toString() }
+    }
 
     suspend fun clear() = dataStore.edit { it.clear() }
 
@@ -39,5 +43,6 @@ class PreferencesDataSource @Inject constructor(private val dataStore: DataStore
         val SOURCE_LANGUAGE = stringPreferencesKey("source_language")
         val TARGET_LANGUAGE = stringPreferencesKey("target_language")
         val LANGUAGE_PAIR = stringPreferencesKey("active_language_pair")
+        val DAILY_GOAL_LESSONS = stringPreferencesKey("daily_goal_lessons")
     }
 }

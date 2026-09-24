@@ -54,6 +54,7 @@ data class LearnerProgress(
     val activeCourseId: String,
     val completedLessonIds: Set<String>,
     val completedDailyChallengeIds: Set<String> = emptySet(),
+    val reviewWordIds: Set<String> = emptySet(),
     val streakDays: Int,
     val xp: Int
 )
@@ -63,6 +64,7 @@ data class UserPreferences(
     val sourceLanguageId: String? = null,
     val targetLanguageId: String? = null,
     val activeLanguagePairId: String? = null,
+    val dailyGoalLessons: Int? = null,
 )
 
 data class Achievement(

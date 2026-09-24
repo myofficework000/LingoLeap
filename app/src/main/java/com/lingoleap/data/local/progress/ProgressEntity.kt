@@ -9,6 +9,7 @@ data class ProgressEntity(
     val activeCourseId: String,
     val completedLessonIdsCsv: String,
     val completedDailyChallengeIdsCsv: String,
+    val reviewWordIdsCsv: String,
     val streakDays: Int,
     val xp: Int,
 ) {

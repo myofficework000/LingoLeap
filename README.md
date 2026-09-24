@@ -29,6 +29,9 @@ LingoLeap is a buildable Android app for short, game-like Indian-language learni
 - Phase 2 foundations: DataStore session/language preferences, Room-backed learner progress, a platform-neutral pronunciation player, lesson completion persistence, achievement rules, and learning-path state derivation.
 - Gamified learning path: progress-aware completed, current, and locked lesson nodes with direct navigation into an available lesson.
 - Daily Challenge: a data-driven, MVI-based quiz flow with immediate feedback and session XP totals.
+- Offline end-to-end learner loop: choose a daily goal, open the course overview, study a lesson, review a lesson recap, take its quiz, and practise vocabulary/listening/fill-in-the-blank without an account.
+- Five new offline learner features: daily-goal setup (DataStore), curriculum overview, lesson recap, a persisted missed-word review deck, and local progress reset controls.
+- The Practice tab now opens a course-aware practice hub instead of a hard-coded Hindi quiz. Incorrect quiz answers are saved locally and can be marked mastered from the review deck.
 
 ## Architecture
 
@@ -57,7 +60,7 @@ app/src/main/java/com/lingoleap
 learning_catalog.json → LearningCatalogDataSource → LearningRepositoryImpl → use cases
 ```
 
-The local catalog is intentionally retained as a temporary backend. Feature ViewModels expose immutable state and events; persistence, audio playback, and authenticated profiles remain the next iteration.
+The local catalog is intentionally retained as a temporary backend. Feature ViewModels expose immutable state and events; Firebase authentication, cloud backup, and remote content delivery remain the next iteration.
 
 ## Completed ownership — milestone one
 

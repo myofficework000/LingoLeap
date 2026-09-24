@@ -21,4 +21,7 @@ interface LearningRepository {
     suspend fun getProgress(): LearnerProgress
     fun observeProgress(): Flow<LearnerProgress>
     suspend fun completeLesson(lessonId: String): LearnerProgress
+    suspend fun addReviewWord(wordId: String): LearnerProgress
+    suspend fun removeReviewWord(wordId: String): LearnerProgress
+    suspend fun resetProgress(): LearnerProgress
 }

@@ -23,7 +23,7 @@ private data class BottomDestination(
 private val destinations = listOf(
     BottomDestination(LingoRoute.Home, "Home", Icons.Default.Home),
     BottomDestination(LingoRoute.Lessons, "Learn", Icons.Default.School),
-    BottomDestination(LingoRoute.Practice, "Practice", Icons.Default.SportsEsports),
+    BottomDestination(LingoRoute.PracticeHub, "Practice", Icons.Default.SportsEsports),
     BottomDestination(LingoRoute.Profile, "Profile", Icons.Default.Person),
 )
 
@@ -36,15 +36,8 @@ fun LingoBottomBar(navController: NavHostController) {
                 selected = currentRoute == destination.route.path,
                 onClick = {
 
-                    val destinationPath =
-                        if (destination.route == LingoRoute.Practice) {
-                            LingoRoute.Quiz.create("en-hi-greetings")
-                        } else {
-                            destination.route.path
-                        }
-
                     navController.navigate(
-                        destinationPath,
+                        destination.route.path,
                         navOptions {
                             launchSingleTop = true
                             restoreState = true

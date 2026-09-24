@@ -10,12 +10,14 @@ class ProgressLocalDataSource @Inject constructor(private val dao: ProgressDao) 
     suspend fun get(): LearnerProgress? = dao.get()?.toDomain()
     fun observe(): Flow<LearnerProgress> = dao.observe().filterNotNull().map { it.toDomain() }
     suspend fun save(progress: LearnerProgress) = dao.upsert(progress.toEntity())
+    suspend fun clear() = dao.clear()
 }
 
 private fun ProgressEntity.toDomain() = LearnerProgress(
     activeCourseId = activeCourseId,
     completedLessonIds = completedLessonIdsCsv.split(',').filter { it.isNotBlank() }.toSet(),
     completedDailyChallengeIds = completedDailyChallengeIdsCsv.split(',').filter { it.isNotBlank() }.toSet(),
+    reviewWordIds = reviewWordIdsCsv.split(',').filter { it.isNotBlank() }.toSet(),
     streakDays = streakDays,
     xp = xp,
 )
@@ -24,6 +26,7 @@ private fun LearnerProgress.toEntity() = ProgressEntity(
     activeCourseId = activeCourseId,
     completedLessonIdsCsv = completedLessonIds.sorted().joinToString(","),
     completedDailyChallengeIdsCsv = completedDailyChallengeIds.sorted().joinToString(","),
+    reviewWordIdsCsv = reviewWordIds.sorted().joinToString(","),
     streakDays = streakDays,
     xp = xp,
 )

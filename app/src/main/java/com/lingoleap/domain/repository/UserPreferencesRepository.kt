@@ -7,5 +7,6 @@ interface UserPreferencesRepository {
     fun observePreferences(): Flow<UserPreferences>
     suspend fun completeOnboarding()
     suspend fun saveLanguagePair(sourceLanguageId: String, targetLanguageId: String, pairId: String)
+    suspend fun saveDailyGoal(lessons: Int)
     suspend fun clear()
 }
