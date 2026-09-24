@@ -27,9 +27,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,9 +47,11 @@ import com.lingoleap.domain.model.VocabularyWord
 fun LessonRoute(
     lessonId: String,
     onCompleted: () -> Unit,
+    onBack: () -> Unit,
     viewModel: LessonViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(lessonId) {
         viewModel.load(lessonId)
@@ -60,6 +65,7 @@ fun LessonRoute(
                 }
 
                 is LessonEffect.ShowMessage -> {
+                    snackbarHostState.showSnackbar(effect.message)
                 }
             }
         }
@@ -67,14 +73,18 @@ fun LessonRoute(
 
     LessonScreen(
         state = state,
-        onEvent = viewModel::onEvent
+        onEvent = viewModel::onEvent,
+        onBack = onBack,
+        snackbarHostState = snackbarHostState,
     )
 }
 
 @Composable
 fun LessonScreen(
     state: LessonState,
-    onEvent: (LessonEvent) -> Unit
+    onEvent: (LessonEvent) -> Unit,
+    onBack: () -> Unit = {},
+    snackbarHostState: SnackbarHostState? = null,
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -89,7 +99,7 @@ fun LessonScreen(
             LessonHeader(
                 state = state,
                 onBack = {
-                    onEvent(LessonEvent.Previous)
+                    onBack()
                 }
             )
 
@@ -144,6 +154,7 @@ fun LessonScreen(
                 }
             )
         }
+        snackbarHostState?.let { SnackbarHost(hostState = it) }
     }
 }
 

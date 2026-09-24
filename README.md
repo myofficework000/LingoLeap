@@ -14,6 +14,7 @@ LingoLeap is an offline-first Android app for learning Indian languages through 
 - Course-aware Practice tab, daily challenges, XP, streaks, progress statistics, achievements, and a gamified learning path.
 - Missed quiz words are saved in a local review deck and can be marked as mastered.
 - Local settings let a learner reset progress without changing the chosen language.
+- Profile Help & Support provides offline guidance; Restart setup returns safely to onboarding without a Firebase account.
 - Material 3 light/dark themes with centralised primary, secondary, progress, surface, and error colour tokens.
 
 ## Learner journey

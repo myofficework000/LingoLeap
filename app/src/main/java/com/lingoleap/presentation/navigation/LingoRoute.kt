@@ -20,5 +20,6 @@ sealed class LingoRoute(val path: String) {
     data object LessonRecap : LingoRoute("lesson_recap/{lessonId}") { fun create(lessonId: String) = "lesson_recap/$lessonId" }
     data object Review : LingoRoute("review")
     data object Settings : LingoRoute("settings")
+    data object Help : LingoRoute("help")
 
 }

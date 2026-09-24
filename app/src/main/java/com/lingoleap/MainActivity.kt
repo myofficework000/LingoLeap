@@ -22,6 +22,7 @@ import com.lingoleap.presentation.feature.course.CourseOverviewRoute
 import com.lingoleap.presentation.feature.recap.LessonRecapRoute
 import com.lingoleap.presentation.feature.review.ReviewRoute
 import com.lingoleap.presentation.feature.settings.SettingsRoute
+import com.lingoleap.presentation.feature.help.HelpRoute
 import com.lingoleap.presentation.feature.language.LanguagePickerRoute
 import com.lingoleap.presentation.feature.learningpath.LearningPathScreen
 import com.lingoleap.presentation.feature.lesson.LessonRoute
@@ -87,12 +88,7 @@ private fun LingoLeapApp() {
                             }
 
                             HomeEvent.Practice -> {
-
-                                navController.navigate(
-                                    LingoRoute.Practice.create(
-                                        lessonId = "en-hi-greetings"
-                                    )
-                                )
+                                navController.navigate(LingoRoute.PracticeHub.path)
                             }
 
                             HomeEvent.Profile -> {
@@ -141,7 +137,11 @@ private fun LingoLeapApp() {
             }
             composable(LingoRoute.Lesson.path) { backStackEntry ->
                 val lessonId = backStackEntry.arguments?.getString("lessonId") ?: return@composable
-                LessonRoute(lessonId = lessonId, onCompleted = { navController.navigate(LingoRoute.LessonRecap.create(lessonId)) })
+                LessonRoute(
+                    lessonId = lessonId,
+                    onCompleted = { navController.navigate(LingoRoute.LessonRecap.create(lessonId)) },
+                    onBack = { navController.popBackStack() },
+                )
             }
             composable(LingoRoute.LessonRecap.path) { backStackEntry ->
                 val lessonId = backStackEntry.arguments?.getString("lessonId") ?: return@composable
@@ -216,8 +216,8 @@ private fun LingoLeapApp() {
                             ProfileEffect.NavigateToStatistics -> navController.navigate(LingoRoute.Progress.path)
                             ProfileEffect.NavigateToAchievements -> navController.navigate(LingoRoute.Achievements.path)
                             ProfileEffect.NavigateToSettings -> navController.navigate(LingoRoute.Settings.path)
+                            ProfileEffect.NavigateToHelpSupport -> navController.navigate(LingoRoute.Help.path)
                             ProfileEffect.SignOut -> navController.navigate(LingoRoute.Onboarding.path) { popUpTo(0) { inclusive = true } }
-                            else -> Unit
                         }
                     }
                 }
@@ -240,6 +240,7 @@ private fun LingoLeapApp() {
             composable(LingoRoute.CourseOverview.path) { CourseOverviewRoute(onOpenLessons = { navController.navigate(LingoRoute.Lessons.path) }, onBack = { navController.popBackStack() }) }
             composable(LingoRoute.Review.path) { ReviewRoute(onBack = { navController.popBackStack() }) }
             composable(LingoRoute.Settings.path) { SettingsRoute(onBack = { navController.popBackStack() }) }
+            composable(LingoRoute.Help.path) { HelpRoute(onBack = { navController.popBackStack() }) }
             composable(LingoRoute.DailyChallenge.path) {
                 DailyChallengeRoute(
                     onBack = { navController.popBackStack() },

@@ -12,9 +12,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.lingoleap.domain.usecase.ClearUserPreferencesUseCase
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(): ViewModel() {
+class ProfileViewModel @Inject constructor(
+    private val clearUserPreferences: ClearUserPreferencesUseCase,
+) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileState())
     val state: StateFlow<ProfileState> = _state.asStateFlow()
@@ -60,9 +63,10 @@ class ProfileViewModel @Inject constructor(): ViewModel() {
             }
 
             ProfileEvent.SignOut -> {
-                sendEffect(
-                    ProfileEffect.SignOut
-                )
+                viewModelScope.launch {
+                    clearUserPreferences()
+                    _effect.send(ProfileEffect.SignOut)
+                }
             }
         }
 

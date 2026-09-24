@@ -166,7 +166,7 @@ fun ProfileContent(
         )
 
         ProfileMenuItem(
-            title = "Sign Out",
+            title = "Restart setup",
             icon = Icons.AutoMirrored.Filled.Logout,
             iconColor = MaterialTheme.colorScheme.error,
             textColor = MaterialTheme.colorScheme.error,

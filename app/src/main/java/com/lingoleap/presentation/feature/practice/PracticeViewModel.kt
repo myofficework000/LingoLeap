@@ -44,15 +44,10 @@ class PracticeViewModel @Inject constructor(
                 observeUserPreferencesUseCase()
                     .first()
 
-            _state.update {
-                it.copy(
-                    words =
-                        lesson?.words ?: emptyList(),
-
-                    sourceLanguageId =
-                        preferences.sourceLanguageId
-                )
-            }
+            _state.value = PracticeState(
+                words = lesson?.words ?: emptyList(),
+                sourceLanguageId = preferences.sourceLanguageId,
+            )
         }
     }
 
