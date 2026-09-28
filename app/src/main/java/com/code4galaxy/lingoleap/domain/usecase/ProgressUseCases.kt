@@ -1,0 +1,34 @@
+package com.code4galaxy.lingoleap.domain.usecase
+
+import com.code4galaxy.lingoleap.domain.achievement.AchievementRules
+import com.code4galaxy.lingoleap.domain.model.Achievement
+import com.code4galaxy.lingoleap.domain.model.LearnerProgress
+import com.code4galaxy.lingoleap.domain.repository.LearningRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+
+class ObserveLearnerProgressUseCase @Inject constructor(private val repository: LearningRepository) {
+    operator fun invoke(): Flow<LearnerProgress> = repository.observeProgress()
+}
+class CompleteLessonUseCase @Inject constructor(private val repository: LearningRepository) {
+    suspend operator fun invoke(lessonId: String): LearnerProgress = repository.completeLesson(lessonId)
+}
+class CompleteDailyChallengeUseCase @Inject constructor(private val repository: LearningRepository) {
+    suspend operator fun invoke(challengeId: String): LearnerProgress = repository.completeDailyChallenge(challengeId)
+}
+class AddReviewWordUseCase @Inject constructor(private val repository: LearningRepository) { suspend operator fun invoke(wordId: String) = repository.addReviewWord(wordId) }
+class RemoveReviewWordUseCase @Inject constructor(private val repository: LearningRepository) { suspend operator fun invoke(wordId: String) = repository.removeReviewWord(wordId) }
+class ResetLearningProgressUseCase @Inject constructor(private val repository: LearningRepository) { suspend operator fun invoke() = repository.resetProgress() }
+class GetAchievementsUseCase @Inject constructor(private val repository: LearningRepository) {
+    suspend operator fun invoke(): List<Achievement> = AchievementRules.evaluate(
+        progress = repository.getProgress(),
+        definitions = repository.getAchievementDefinitions(),
+    )
+    fun observe(): Flow<List<Achievement>> = flow {
+        val definitions = repository.getAchievementDefinitions()
+        emitAll(repository.observeProgress().map { progress -> AchievementRules.evaluate(progress, definitions) })
+    }
+}

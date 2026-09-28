@@ -3,14 +3,15 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.lingoleap"
+    namespace = "com.code4galaxy.lingoleap"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.lingoleap"
+        applicationId = "com.code4galaxy.lingoleap"
         minSdk = 26
         targetSdk = 37
         versionCode = 1
@@ -50,6 +51,9 @@ dependencies {
     ksp("androidx.room:room-compiler:2.8.4")
 
     implementation("androidx.compose.material:material-icons-extended")
+    implementation(platform("com.google.firebase:firebase-bom:34.19.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
 
     testImplementation("junit:junit:4.13.2")
     implementation("androidx.datastore:datastore-preferences:1.2.1")

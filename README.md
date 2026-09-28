@@ -78,8 +78,17 @@ jq empty app/src/main/assets/daily_challenges.json
 jq empty app/src/main/assets/achievements.json
 ```
 
-## Firebase boundary
+## Firebase integration
 
-Firebase is deliberately not included yet. The app is fully usable offline; Firebase can later provide optional sign-in, backup/sync of learner progress, remote configuration, analytics, and crash reporting. Curriculum content remains local JSON so learning continues without an internet connection.
+Firebase is configured on the Spark (no-cost) plan for project `lingoleap-75612`.
+
+- Anonymous Authentication gives each installation a user identity without an account form.
+- Cloud Firestore stores an encrypted-in-transit backup at `users/{uid}/courses/{courseId}`.
+- Firestore rules allow an authenticated user to access only their own `users/{uid}` document tree; all other documents are denied.
+- The app starts anonymous sign-in automatically and backs up local lesson progress, XP, streaks, completed challenges, and review words in the background.
+
+Local JSON and Room remain the source of truth, so learning still works if Firebase or the network is unavailable. A later account-linking screen can convert anonymous users to Google or email sign-in for cross-device recovery.
+
+`app/google-services.json` is intentionally ignored by Git. It has been added to this local workspace; a new checkout should download the matching Android configuration file for `com.code4galaxy.lingoleap` from Firebase Console → Project settings → Your apps, then place it in `app/`.
 
 For the full local-first strategy, see [docs/OFFLINE_FIRST_PLAN.md](docs/OFFLINE_FIRST_PLAN.md).

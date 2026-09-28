@@ -17,14 +17,14 @@ Learning must work in airplane mode after installation. Courses, vocabulary, les
 
 Each content asset must have a schema version, stable IDs, and a validation test before it is added to a release. Content is immutable in the installed app; progress is always local and mutable.
 
-## Firebase: optional, small, and user-owned
+## Firebase: small, user-owned backup
 
-Firebase is not part of the learning loop. Add it only after the offline experience has complete navigation and test coverage.
+Firebase is not part of the learning loop. The current app uses it only for a best-effort backup after the local experience is ready; local JSON and Room still work without a network.
 
 1. **Authentication:** Anonymous sign-in first; optionally link Google sign-in. The app remains usable without an account.
-2. **Cloud backup:** Firestore stores one compact document per signed-in user containing preferences, current course, XP, completions, and a `lastUpdatedAt` value. It never stores the catalog, quiz payloads, or media.
+2. **Cloud backup:** Firestore stores a compact course-progress document at `users/{uid}/courses/{courseId}` containing XP, completions, review words, daily challenges, and `updatedAt`. It never stores the catalog, quiz payloads, or media.
 3. **Reliability:** Crashlytics and Analytics are optional release-only tools. Remote Config is limited to a content-pack minimum version and feature flags.
-4. **Sync:** A WorkManager job uploads local changes when connected. On conflict, preserve the higher XP and union completion IDs. The local database remains the source of truth while offline.
+4. **Sync:** The app currently observes Room progress and backs up changes while running. A later WorkManager job should add background retry and conflict resolution (higher XP plus union completion IDs). The local database remains the source of truth while offline.
 
 This footprint stays within a low-cost/free usage profile because reads and writes are limited to explicit account sync rather than every lesson interaction.
 
@@ -49,8 +49,8 @@ This footprint stays within a low-cost/free usage profile because reads and writ
 - Add migration tests for Room progress and a manual airplane-mode test script.
 - Add accessibility labels, scalable text checks, and dark-theme verification.
 
-### Milestone D — optional account backup
+### Milestone D — account-linking and resilient sync
 
-- Add Firebase credentials outside source control, then anonymous auth and explicit “Back up my progress” consent.
-- Implement WorkManager sync and a conflict-resolution test suite.
+- Link anonymous users to Google or email sign-in for cross-device recovery.
+- Add WorkManager retries and a conflict-resolution test suite.
 - Keep all content packs local; only user state syncs.
