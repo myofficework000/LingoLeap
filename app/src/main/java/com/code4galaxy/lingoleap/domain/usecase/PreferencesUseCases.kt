@@ -1,8 +1,8 @@
 package com.code4galaxy.lingoleap.domain.usecase
 
-import com.code4galaxy.lingoleap.domain.model.UserPreferences
 import com.code4galaxy.lingoleap.domain.repository.UserPreferencesRepository
 import com.code4galaxy.lingoleap.domain.repository.LearningRepository
+import com.lingoleap.domain.model.UserPreferences
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -13,6 +13,18 @@ class CompleteOnboardingUseCase @Inject constructor(private val repository: User
     suspend operator fun invoke() = repository.completeOnboarding()
 }
 class SaveLanguagePairUseCase @Inject constructor(private val repository: UserPreferencesRepository) {
+    suspend operator fun invoke(
+        sourceId: String,
+        targetId: String,
+        pairId: String,
+        dailyGoalMinutes: Int
+    ) =
+        repository.saveLanguagePair(
+            sourceId,
+            targetId,
+            pairId,
+            dailyGoalMinutes
+        )}
     suspend operator fun invoke(sourceId: String, targetId: String, pairId: String) = repository.saveLanguagePair(sourceId, targetId, pairId)
 }
 class SetActiveLanguagePairUseCase @Inject constructor(private val repository: LearningRepository) {

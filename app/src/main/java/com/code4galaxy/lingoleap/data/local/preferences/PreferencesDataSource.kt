@@ -4,8 +4,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.code4galaxy.lingoleap.domain.model.UserPreferences
+import com.lingoleap.domain.model.UserPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -19,17 +20,24 @@ class PreferencesDataSource @Inject constructor(private val dataStore: DataStore
             sourceLanguageId = values[SOURCE_LANGUAGE],
             targetLanguageId = values[TARGET_LANGUAGE],
             activeLanguagePairId = values[LANGUAGE_PAIR],
+            dailyGoalMinutes = values[DAILY_GOAL_MINUTES],
             dailyGoalLessons = values[DAILY_GOAL_LESSONS]?.toIntOrNull(),
         )
     }
 
     suspend fun completeOnboarding() = dataStore.edit { it[ONBOARDING_COMPLETE] = true }
 
-    suspend fun saveLanguagePair(sourceLanguageId: String, targetLanguageId: String, pairId: String) {
+    suspend fun saveLanguagePair(
+        sourceLanguageId: String,
+        targetLanguageId: String,
+        pairId: String,
+        dailyGoalMinutes: Int
+    ) {
         dataStore.edit {
             it[SOURCE_LANGUAGE] = sourceLanguageId
             it[TARGET_LANGUAGE] = targetLanguageId
             it[LANGUAGE_PAIR] = pairId
+            it[DAILY_GOAL_MINUTES] = dailyGoalMinutes
         }
     }
     suspend fun saveDailyGoal(lessons: Int) {
@@ -43,6 +51,8 @@ class PreferencesDataSource @Inject constructor(private val dataStore: DataStore
         val SOURCE_LANGUAGE = stringPreferencesKey("source_language")
         val TARGET_LANGUAGE = stringPreferencesKey("target_language")
         val LANGUAGE_PAIR = stringPreferencesKey("active_language_pair")
+        val DAILY_GOAL_MINUTES =
+            intPreferencesKey("daily_goal_minutes")
         val DAILY_GOAL_LESSONS = stringPreferencesKey("daily_goal_lessons")
     }
 }
