@@ -9,6 +9,19 @@ import javax.inject.Inject
 class UserPreferencesRepositoryImpl @Inject constructor(private val source: PreferencesDataSource) : UserPreferencesRepository {
     override fun observePreferences(): Flow<UserPreferences> = source.preferences
     override suspend fun completeOnboarding() { source.completeOnboarding() }
+    override suspend fun saveLanguagePair(
+        sourceLanguageId: String,
+        targetLanguageId: String,
+        pairId: String,
+        dailyGoalMinutes: Int
+    ) {
+        source.saveLanguagePair(
+            sourceLanguageId,
+            targetLanguageId,
+            pairId,
+            dailyGoalMinutes
+        )
+    }
     override suspend fun saveLanguagePair(sourceLanguageId: String, targetLanguageId: String, pairId: String) =
         source.saveLanguagePair(sourceLanguageId, targetLanguageId, pairId)
     override suspend fun saveDailyGoal(lessons: Int) = source.saveDailyGoal(lessons)

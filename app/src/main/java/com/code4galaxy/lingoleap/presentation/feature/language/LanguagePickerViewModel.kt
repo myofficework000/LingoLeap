@@ -1,4 +1,4 @@
-package com.code4galaxy.lingoleap.presentation.feature.language
+package com.lingoleap.presentation.feature.language
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,6 +6,7 @@ import com.code4galaxy.lingoleap.domain.usecase.GetLanguagePairsUseCase
 import com.code4galaxy.lingoleap.domain.usecase.GetSupportedLanguagesUseCase
 import com.code4galaxy.lingoleap.domain.usecase.SaveLanguagePairUseCase
 import com.code4galaxy.lingoleap.domain.usecase.SetActiveLanguagePairUseCase
+import com.code4galaxy.lingoleap.presentation.feature.language.LanguagePickerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.async
@@ -27,12 +28,17 @@ class LanguagePickerViewModel @Inject constructor(
     private val setActiveLanguagePair: SetActiveLanguagePairUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(LanguagePickerState())
+    private val _state =
+        MutableStateFlow(LanguagePickerState())
 
     val state: StateFlow<LanguagePickerState> =
         _state.asStateFlow()
-    private val _effect = Channel<LanguagePickerEffect>(Channel.BUFFERED)
-    val effect: Flow<LanguagePickerEffect> = _effect.receiveAsFlow()
+
+    private val _effect =
+        Channel<LanguagePickerEffect>(Channel.BUFFERED)
+
+    val effect: Flow<LanguagePickerEffect> =
+        _effect.receiveAsFlow()
 
     init {
         loadLanguages()
@@ -42,11 +48,21 @@ class LanguagePickerViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val (languages, pairs) = coroutineScope {
-                val languages = async { getSupportedLanguagesUseCase() }
-                val pairs = async { getLanguagePairsUseCase() }
-                languages.await() to pairs.await()
-            }
+            val (languages, pairs) =
+                coroutineScope {
+
+                    val languages =
+                        async {
+                            getSupportedLanguagesUseCase()
+                        }
+
+                    val pairs =
+                        async {
+                            getLanguagePairsUseCase()
+                        }
+
+                    languages.await() to pairs.await()
+                }
 
             _state.update { currentState ->
                 currentState.copy(
@@ -62,6 +78,7 @@ class LanguagePickerViewModel @Inject constructor(
         when (event) {
 
             is LanguagePickerEvent.SelectSource -> {
+
                 _state.update { currentState ->
                     currentState.copy(
                         selectedSourceId = event.languageId,
@@ -71,6 +88,7 @@ class LanguagePickerViewModel @Inject constructor(
             }
 
             is LanguagePickerEvent.SelectTarget -> {
+
                 _state.update { currentState ->
                     currentState.copy(
                         selectedTargetId = event.languageId
@@ -78,13 +96,47 @@ class LanguagePickerViewModel @Inject constructor(
                 }
             }
 
+            is LanguagePickerEvent.SelectDailyGoal -> {
+
+                _state.update { currentState ->
+                    currentState.copy(
+                        selectedDailyGoalMinutes = event.minutes
+                    )
+                }
+            }
+
             LanguagePickerEvent.Confirm -> {
-                val sourceId = _state.value.selectedSourceId ?: return
-                val targetId = _state.value.selectedTargetId ?: return
-                val pair = _state.value.pairs.firstOrNull {
-                    it.sourceLanguageId == sourceId && it.targetLanguageId == targetId
-                } ?: return
+
+                val sourceId =
+                    _state.value.selectedSourceId
+                        ?: return
+
+                val targetId =
+                    _state.value.selectedTargetId
+                        ?: return
+
+                val dailyGoal =
+                    _state.value.selectedDailyGoalMinutes
+                        ?: return
+
+                val pair =
+                    _state.value.pairs.firstOrNull {
+                        it.sourceLanguageId == sourceId &&
+                                it.targetLanguageId == targetId
+                    } ?: return
+
                 viewModelScope.launch {
+
+                    saveLanguagePair(
+                        sourceId,
+                        targetId,
+                        pair.id,
+                        dailyGoal
+                    )
+
+                    _effect.send(
+                        LanguagePickerEffect.Confirmed
+                    )
                     saveLanguagePair(sourceId, targetId, pair.id)
                     setActiveLanguagePair(pair.id)
                     _effect.send(LanguagePickerEffect.Confirmed)
@@ -94,4 +146,6 @@ class LanguagePickerViewModel @Inject constructor(
     }
 }
 
-sealed interface LanguagePickerEffect { data object Confirmed : LanguagePickerEffect }
+sealed interface LanguagePickerEffect {
+    data object Confirmed : LanguagePickerEffect
+}
