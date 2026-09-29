@@ -13,20 +13,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
-    private val getLessonQuizUseCase: GetLessonQuizUseCase
+    private val getLessonQuizUseCase:
+    GetLessonQuizUseCase
 ) : ViewModel() {
 
     private val _quizState =
-        MutableStateFlow(QuizState())
+        MutableStateFlow(
+            QuizState()
+        )
 
     val quizState: StateFlow<QuizState> =
         _quizState.asStateFlow()
 
-    fun loadQuiz(lessonId: String) {
+    fun loadQuiz(
+        lessonId: String
+    ) {
+
         viewModelScope.launch {
 
             val quizzes =
-                getLessonQuizUseCase(lessonId)
+                getLessonQuizUseCase(
+                    lessonId
+                )
 
             _quizState.update {
                 it.copy(
@@ -35,24 +43,25 @@ class QuizViewModel @Inject constructor(
                     selectedAnswer = null,
                     isAnswerChecked = false,
                     score = 0,
-                    isQuizCompleted = false
+                    isQuizCompleted = false,
+                    answerResults =
+                        emptyList(),
+                    showMistakes = false
                 )
             }
         }
     }
 
-    fun onEvent(event: QuizEvent) {
+    fun onEvent(
+        event: QuizEvent
+    ) {
 
         when (event) {
 
             is QuizEvent.SelectAnswer -> {
-                if (!_quizState.value.isAnswerChecked) {
-                    _quizState.update {
-                        it.copy(
-                            selectedAnswer = event.answer
-                        )
-                    }
-                }
+                selectAnswer(
+                    event.answer
+                )
             }
 
             QuizEvent.CheckAnswer -> {
@@ -62,12 +71,50 @@ class QuizViewModel @Inject constructor(
             QuizEvent.Next -> {
                 moveToNextQuestion()
             }
+
+            QuizEvent.ReviewMistakes -> {
+
+                _quizState.update {
+                    it.copy(
+                        showMistakes = true
+                    )
+                }
+            }
+
+            QuizEvent.BackToResults -> {
+
+                _quizState.update {
+                    it.copy(
+                        showMistakes = false
+                    )
+                }
+            }
+
+            QuizEvent.RetryQuiz -> {
+                retryQuiz()
+            }
+        }
+    }
+
+    private fun selectAnswer(
+        answer: String
+    ) {
+
+        if (_quizState.value.isAnswerChecked) {
+            return
+        }
+
+        _quizState.update {
+            it.copy(
+                selectedAnswer = answer
+            )
         }
     }
 
     private fun checkAnswer() {
 
-        val state = _quizState.value
+        val state =
+            _quizState.value
 
         if (state.isAnswerChecked) {
             return
@@ -79,28 +126,44 @@ class QuizViewModel @Inject constructor(
             ) ?: return
 
         val selectedAnswer =
-            state.selectedAnswer ?: return
+            state.selectedAnswer
+                ?: return
 
         val isCorrect =
             selectedAnswer ==
                     currentQuiz.correctAnswer
 
+        val result =
+            QuizAnswerResult(
+                quiz = currentQuiz,
+                selectedAnswer =
+                    selectedAnswer,
+                isCorrect = isCorrect
+            )
+
         _quizState.update {
+
             it.copy(
                 isAnswerChecked = true,
+
                 score =
                     if (isCorrect) {
                         it.score + 1
                     } else {
                         it.score
-                    }
+                    },
+
+                answerResults =
+                    it.answerResults +
+                            result
             )
         }
     }
 
     private fun moveToNextQuestion() {
 
-        val state = _quizState.value
+        val state =
+            _quizState.value
 
         if (!state.isAnswerChecked) {
             return
@@ -114,7 +177,8 @@ class QuizViewModel @Inject constructor(
 
             _quizState.update {
                 it.copy(
-                    isQuizCompleted = true
+                    isQuizCompleted = true,
+                    showMistakes = false
                 )
             }
 
@@ -128,6 +192,21 @@ class QuizViewModel @Inject constructor(
                     isAnswerChecked = false
                 )
             }
+        }
+    }
+
+    private fun retryQuiz() {
+
+        _quizState.update {
+            it.copy(
+                currentQuestionIndex = 0,
+                selectedAnswer = null,
+                isAnswerChecked = false,
+                score = 0,
+                isQuizCompleted = false,
+                answerResults = emptyList(),
+                showMistakes = false
+            )
         }
     }
 }
