@@ -1,8 +1,8 @@
 # VaaniVerse4U Terms of Use
 
 **Effective date:** 2 October 2026
-**Publisher:** Code4Galaxy
-**Contact:** `[SUPPORT_EMAIL]` — replace before publishing.
+**Publisher:** Abhishek Pathak (Code4Galaxy)
+**Contact:** code4galaxy@gmail.com
 
 By downloading or using VaaniVerse4U, you agree to these terms.
 
@@ -12,7 +12,7 @@ VaaniVerse4U provides self-guided, offline-first language-learning lessons and p
 
 ## Acceptable use
 
-Use the app lawfully and do not attempt to interfere with its operation, reverse engineer it except where law permits, or misuse its cloud backup service. The lesson content, app design, logos, and software are owned by Code4Galaxy or its licensors and may not be copied or redistributed except as permitted by law.
+Use the app lawfully and do not attempt to interfere with its operation, reverse engineer it except where law permits, or misuse its cloud backup service. The lesson content, app design, logos, and software are owned by Abhishek Pathak / Code4Galaxy or its licensors and may not be copied or redistributed except as permitted by law.
 
 ## Availability and changes
 
@@ -24,7 +24,7 @@ The app is provided “as is” and “as available” to the extent permitted b
 
 ## Contact
 
-For support, contact `[SUPPORT_EMAIL]`.
+For support, contact code4galaxy@gmail.com.
 
 ---
 

@@ -1,8 +1,8 @@
 # VaaniVerse4U Privacy Policy
 
 **Effective date:** 2 October 2026
-**Publisher:** Code4Galaxy
-**Contact:** Replace `[SUPPORT_EMAIL]` with a monitored support email address before publishing this policy.
+**Publisher:** Abhishek Pathak (Code4Galaxy)
+**Contact:** code4galaxy@gmail.com
 
 VaaniVerse4U is an offline-first language-learning application. This policy explains how the app handles information when you use it.
 
@@ -24,7 +24,7 @@ Firebase processes this information on Google infrastructure to provide the back
 
 ## Retention and deletion
 
-Local learning data remains on the device until you reset it in **Settings → Reset local progress** or uninstall the app. You can delete the anonymous Firebase identity and its cloud learning backup from **Settings → Delete cloud backup**. This does not delete your local progress. You can also contact `[SUPPORT_EMAIL]` for help with a deletion request.
+Local learning data remains on the device until you reset it in **Settings → Reset local progress** or uninstall the app. You can delete the anonymous Firebase identity and its cloud learning backup from **Settings → Delete cloud backup**. This does not delete your local progress. You can also contact code4galaxy@gmail.com for help with a deletion request.
 
 ## Security
 
@@ -32,12 +32,12 @@ Firebase traffic is encrypted in transit. Firestore rules restrict the backup do
 
 ## Children
 
-VaaniVerse4U is not directed to children under 13 and does not knowingly collect personal information from children. If you believe a child has provided personal information, contact `[SUPPORT_EMAIL]`.
+VaaniVerse4U is not directed to children under 13 and does not knowingly collect personal information from children. If you believe a child has provided personal information, contact code4galaxy@gmail.com.
 
 ## Changes and contact
 
-We may update this policy when the app’s data practices change. The effective date above will be updated with the revision. For privacy questions, contact `[SUPPORT_EMAIL]`.
+We may update this policy when the app’s data practices change. The effective date above will be updated with the revision. For privacy questions, contact code4galaxy@gmail.com.
 
 ---
 
-Before Google Play submission, publish this exact policy at a public, non-editable HTTPS URL (for example a page on the publisher website or a public GitHub Pages site), replace the bracketed contact email, and use that URL in Play Console.
+Before Google Play submission, publish this exact policy at a public, non-editable HTTPS URL (for example a page on the publisher website or a public GitHub Pages site), then use that URL in Play Console.
