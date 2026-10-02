@@ -1,8 +1,8 @@
-# LingoLeap
+# VaaniVerse4U
 
-LingoLeap is an offline-first Android app for learning Indian languages through short, game-like lessons. It supports English ↔ regional-language learning with a complete local learner flow—no account or network connection required.
+VaaniVerse4U is an offline-first Android app for learning Indian languages through short, game-like lessons. It supports English ↔ regional-language learning with a complete local learner flow—no account or network connection required.
 
-<img width="1024" height="1536" alt="LingoLeap prototype and supported app flow" src="https://github.com/user-attachments/assets/444ad978-712b-46da-a297-674a12abaaca" />
+<img width="1024" height="1536" alt="VaaniVerse4U prototype and supported app flow" src="https://github.com/user-attachments/assets/444ad978-712b-46da-a297-674a12abaaca" />
 
 ## What works
 
@@ -45,7 +45,7 @@ Content files:
 ## Architecture
 
 ```text
-app/src/main/java/com/lingoleap
+app/src/main/java/com/code4galaxy/vaaniverse4u
 ├── core/mvi                 UiState, UiEvent, UiEffect contracts
 ├── data                     JSON sources, DataStore, Room, repositories
 ├── di                       Hilt modules
@@ -89,6 +89,6 @@ Firebase is configured on the Spark (no-cost) plan for project `lingoleap-75612`
 
 Local JSON and Room remain the source of truth, so learning still works if Firebase or the network is unavailable. A later account-linking screen can convert anonymous users to Google or email sign-in for cross-device recovery.
 
-`app/google-services.json` is intentionally ignored by Git. It has been added to this local workspace; a new checkout should download the matching Android configuration file for `com.code4galaxy.lingoleap` from Firebase Console → Project settings → Your apps, then place it in `app/`.
+`app/google-services.json` is intentionally ignored by Git. It has been added to this local workspace; a new checkout should download the matching Android configuration file for `com.code4galaxy.vaaniverse4u` from Firebase Console → Project settings → Your apps, then place it in `app/`.
 
 For the full local-first strategy, see [docs/OFFLINE_FIRST_PLAN.md](docs/OFFLINE_FIRST_PLAN.md).

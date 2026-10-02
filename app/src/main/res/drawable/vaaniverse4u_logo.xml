@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- A speech bubble, owl, and open book: language, guidance, and learning. -->
+    <path android:fillColor="#E8F8ED" android:pathData="M17,16C10.9,16 6,20.9 6,27v42c0,6.1 4.9,11 11,11h12l-5,12 20,-12h30c6.1,0 11,-4.9 11,-11V27c0,-6.1 -4.9,-11 -11,-11z" />
+    <path android:fillColor="#2563EB" android:pathData="M84,21c0,-3.3 2.7,-6 6,-6h7c2.8,0 5,2.2 5,5s-2.2,5 -5,5h-7c-3.3,0 -6,-2.7 -6,-6zM88,34c0,-2.8 2.2,-5 5,-5h8c2.8,0 5,2.2 5,5s-2.2,5 -5,5h-8c-2.8,0 -5,-2.2 -5,-5z" />
+    <path android:fillColor="#007A3D" android:pathData="M28,48L24,28l12,7c5.3,-3.2 11.4,-4.9 18,-4.9 6.6,0 12.7,1.7 18,4.9l12,-7 -4,20v19c0,14.4 -11.6,24 -26,24S28,81.4 28,67z" />
+    <path android:fillColor="#149B50" android:pathData="M28,58L15,48l3,20c1.2,8.2 6.8,13.7 16,16.3V65zM80,58L93,48l-3,20c-1.2,8.2 -6.8,13.7 -16,16.3V65z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M32,53a12,12 0,1 0,24 0a12,12 0,1 0,-24 0zM52,53a12,12 0,1 0,24 0a12,12 0,1 0,-24 0z" />
+    <path android:fillColor="#102A43" android:pathData="M40,53a4.5,4.5 0,1 0,9 0a4.5,4.5 0,1 0,-9 0zM59,53a4.5,4.5 0,1 0,9 0a4.5,4.5 0,1 0,-9 0z" />
+    <path android:fillColor="#F59E0B" android:pathData="M54,60l-6,6 6,6 6,-6z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M35,75c6,-2.8 12.3,-1.9 19,3.1 6.7,-5 13,-5.9 19,-3.1v11.5c-6.4,-2.4 -12.7,-1.4 -19,3 -6.3,-4.4 -12.6,-5.4 -19,-3z" />
+    <path android:fillColor="#2563EB" android:pathData="M53,78.1h2v10.8h-2z" />
+</vector>

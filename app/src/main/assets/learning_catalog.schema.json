@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "LingoLeap learning catalog",
+  "title": "VaaniVerse4U learning catalog",
   "description": "Authoring contract for the local mock curriculum. One regional curriculum generates both English-to-regional and regional-to-English courses.",
   "type": "object",
   "required": ["catalogVersion", "languages", "languagePairs", "curricula", "progress"],
@@ -9,6 +9,18 @@
     "defaultLanguagePairId": {"type": "string"},
     "languages": {"type": "array", "minItems": 2},
     "languagePairs": {"type": "array", "minItems": 2},
+    "progress": {
+      "type": "object",
+      "required": ["activeCourseId", "completedLessonIds", "completedDailyChallengeIds", "reviewWordIds", "streakDays", "xp"],
+      "properties": {
+        "activeCourseId": {"type": "string"},
+        "completedLessonIds": {"type": "array", "items": {"type": "string"}},
+        "completedDailyChallengeIds": {"type": "array", "items": {"type": "string"}},
+        "reviewWordIds": {"type": "array", "items": {"type": "string"}},
+        "streakDays": {"type": "integer", "minimum": 0},
+        "xp": {"type": "integer", "minimum": 0}
+      }
+    },
     "curricula": {
       "type": "array",
       "items": {

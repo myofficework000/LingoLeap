@@ -1,0 +1,17 @@
+package com.code4galaxy.vaaniverse4u.data.local.progress
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "learner_progress")
+data class ProgressEntity(
+    @PrimaryKey val id: Int = SINGLETON_ID,
+    val activeCourseId: String,
+    val completedLessonIdsCsv: String,
+    val completedDailyChallengeIdsCsv: String,
+    val reviewWordIdsCsv: String,
+    val streakDays: Int,
+    val xp: Int,
+) {
+    companion object { const val SINGLETON_ID = 1 }
+}

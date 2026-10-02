@@ -1,1 +1,4 @@
-<resources><string name="app_name">LingoLeap</string></resources>
+<resources>
+    <string name="app_name">VaaniVerse4U</string>
+    <string name="app_tagline">Learn local. Go global.</string>
+</resources>

@@ -1,4 +1,4 @@
-# LingoLeap offline-first delivery plan
+# VaaniVerse4U offline-first delivery plan
 
 ## Product boundary
 
@@ -12,8 +12,8 @@ Learning must work in airplane mode after installation. Courses, vocabulary, les
 | Daily challenge prompts | JSON asset → repository | `daily_challenges.json` |
 | Achievement rules and copy | JSON asset → repository | `achievements.json` |
 | JSON authoring contract | JSON Schema | `learning_catalog.schema.json` |
-| Selected languages and onboarding | DataStore | `lingoleap_preferences` |
-| XP, completed lessons, completed daily challenges | Room | `lingoleap.db` |
+| Selected languages and onboarding | DataStore | `vaaniverse4u_preferences` |
+| XP, completed lessons, completed daily challenges | Room | `vaaniverse4u.db` |
 
 Each content asset must have a schema version, stable IDs, and a validation test before it is added to a release. Content is immutable in the installed app; progress is always local and mutable.
 
