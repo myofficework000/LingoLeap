@@ -29,19 +29,47 @@ class FirebaseProgressBackup @Inject constructor(
 ) : CloudBackupRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var backupJob: Job? = null
+    private var observedUid: String? = null
 
     fun start() {
-        auth.currentUser?.uid?.let(::observeAndBackup)
-            ?: auth.signInAnonymously().addOnSuccessListener { result ->
-                result.user?.uid?.let(::observeAndBackup)
-            }
+        auth.addAuthStateListener { firebaseAuth ->
+            firebaseAuth.currentUser?.let { user -> synchronizeUser(user.uid, user.isAnonymous) }
+        }
+        if (auth.currentUser == null) auth.signInAnonymously()
     }
 
-    private fun observeAndBackup(uid: String) {
-        if (backupJob != null) return
+    private fun synchronizeUser(uid: String, isAnonymous: Boolean) {
+        if (observedUid == uid && backupJob?.isActive == true) return
+        backupJob?.cancel()
+        observedUid = uid
         backupJob = scope.launch {
+            // A cloud read is best effort. Connectivity, a stale Firebase session, or a
+            // temporary rules error must never take down the offline-first learning app.
+            // The local Room state remains usable and is synced once the next update occurs.
+            if (!isAnonymous) {
+                runCatching { restoreCloudProgress(uid) }
+            }
             learningRepository.observeProgress().collect { progress -> backup(uid, progress) }
         }
+    }
+
+    private suspend fun restoreCloudProgress(uid: String) {
+        val userDocument = firestore.collection("users").document(uid).get().await()
+        val activeCourseId = userDocument.getString("activeCourseId") ?: return
+        val progressDocument = userDocument.reference.collection("courses").document(activeCourseId).get().await()
+        if (!progressDocument.exists()) return
+        val restored = LearnerProgress(
+            activeCourseId = progressDocument.getString("activeCourseId") ?: activeCourseId,
+            completedLessonIds = (progressDocument.get("completedLessonIds") as? List<*>)
+                ?.filterIsInstance<String>()?.toSet().orEmpty(),
+            completedDailyChallengeIds = (progressDocument.get("completedDailyChallengeIds") as? List<*>)
+                ?.filterIsInstance<String>()?.toSet().orEmpty(),
+            reviewWordIds = (progressDocument.get("reviewWordIds") as? List<*>)
+                ?.filterIsInstance<String>()?.toSet().orEmpty(),
+            streakDays = (progressDocument.getLong("streakDays") ?: 0L).toInt(),
+            xp = (progressDocument.getLong("xp") ?: 0L).toInt(),
+        ).withoutLegacyDemoSeed()
+        learningRepository.replaceProgress(restored)
     }
 
     private fun backup(uid: String, progress: LearnerProgress) {
@@ -49,6 +77,7 @@ class FirebaseProgressBackup @Inject constructor(
         user.set(
             mapOf(
                 "uid" to uid,
+                "activeCourseId" to progress.activeCourseId,
                 "updatedAt" to FieldValue.serverTimestamp(),
                 "syncVersion" to 1,
             ),
@@ -69,13 +98,16 @@ class FirebaseProgressBackup @Inject constructor(
     }
 
     /**
-     * Removes the anonymous Firebase Auth user and the only Firestore documents
-     * VaaniVerse4U creates for that user. Offline content and local progress remain.
+     * Removes the cloud learning backup. A guest identity can safely be removed too;
+     * an email or Google account is deliberately retained because Firebase requires a
+     * recent re-authentication before an account can be deleted. Offline content and
+     * local progress remain on the device.
      */
     override suspend fun deleteCloudBackup() {
         val user = auth.currentUser ?: return
         backupJob?.cancel()
         backupJob = null
+        observedUid = null
 
         val userDocument = firestore.collection("users").document(user.uid)
         val courseDocuments = userDocument.collection("courses").get().await().documents
@@ -83,6 +115,22 @@ class FirebaseProgressBackup @Inject constructor(
             courseDocuments.forEach { document -> batch.delete(document.reference) }
             batch.delete(userDocument)
         }.await()
-        user.delete().await()
+        if (user.isAnonymous) {
+            user.delete().await()
+        }
+    }
+}
+
+/** Removes only the identifiable pre-release demonstration fixture from a backup. */
+private fun LearnerProgress.withoutLegacyDemoSeed(): LearnerProgress {
+    val containsDemoSeed = "en-hi-greetings" in completedLessonIds && streakDays >= 5 && xp >= 120
+    return if (containsDemoSeed) {
+        copy(
+            completedLessonIds = completedLessonIds - "en-hi-greetings",
+            streakDays = 0,
+            xp = (xp - 120).coerceAtLeast(0),
+        )
+    } else {
+        this
     }
 }

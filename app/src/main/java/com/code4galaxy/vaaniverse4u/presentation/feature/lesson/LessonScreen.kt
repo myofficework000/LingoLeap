@@ -1,5 +1,6 @@
 package com.code4galaxy.vaaniverse4u.presentation.feature.lesson
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,11 +37,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.code4galaxy.vaaniverse4u.R
 import com.code4galaxy.vaaniverse4u.domain.model.VocabularyWord
 
 @Composable
@@ -88,13 +93,23 @@ fun LessonScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = Color.Transparent
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 18.dp)
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(R.drawable.lesson_practice_scene),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(460.dp),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.TopCenter,
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp, vertical = 18.dp)
+            ) {
 
             LessonHeader(
                 state = state,
@@ -153,6 +168,7 @@ fun LessonScreen(
                     }
                 }
             )
+            }
         }
         snackbarHostState?.let { SnackbarHost(hostState = it) }
     }
@@ -175,11 +191,10 @@ private fun LessonHeader(
         ) {
             IconButton(
                 onClick = onBack,
-                enabled = !state.isFirstWord
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Previous word"
+                    contentDescription = "Back to lessons"
                 )
             }
         }
@@ -194,7 +209,8 @@ private fun LessonHeader(
             Text(
                 text = state.lesson?.title ?: "Lesson",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
             )
 
             Spacer(
@@ -204,14 +220,14 @@ private fun LessonHeader(
             Text(
                 text = "Vocabulary practice",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color(0xFFE0F1E8)
             )
         }
 
         if (state.totalWords > 0) {
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = Color(0xFF004D3B)
             ) {
                 Text(
                     text = "${state.wordIndex + 1}/${state.totalWords}",
@@ -221,7 +237,7 @@ private fun LessonHeader(
                     ),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = Color.White
                 )
             }
         }
@@ -245,14 +261,14 @@ private fun LessonProgress(
             Text(
                 text = "Your progress",
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color(0xFFE0F1E8)
             )
 
             Text(
                 text = "${(progress * 100).toInt()}%",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = Color.White
             )
         }
 
@@ -266,8 +282,8 @@ private fun LessonProgress(
                 .fillMaxWidth()
                 .height(8.dp)
                 .clip(RoundedCornerShape(10.dp)),
-            color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.surfaceContainerHighest
+            color = Color(0xFFFFC145),
+            trackColor = Color(0x6680CBB1)
         )
 
         if (totalWords > 0) {
@@ -278,7 +294,7 @@ private fun LessonProgress(
             Text(
                 text = "$currentWord of $totalWords words",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color(0xFFE0F1E8)
             )
         }
     }
@@ -294,7 +310,7 @@ private fun VocabularyCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+            containerColor = Color(0xFFFFFCF6)
         )
     ) {
         Column(
@@ -309,17 +325,17 @@ private fun VocabularyCard(
 
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = Color(0xFFC8F7D7)
             ) {
                 Text(
-                    text = "LEARN THIS WORD",
+                    text = "NEW WORD",
                     modifier = Modifier.padding(
                         horizontal = 12.dp,
                         vertical = 6.dp
                     ),
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = Color(0xFF07583E)
                 )
             }
 
@@ -328,9 +344,10 @@ private fun VocabularyCard(
             )
 
             Text(
-                text = word.sourceText,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = word.targetText,
+                style = MaterialTheme.typography.displayMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color(0xFF061E54),
                 textAlign = TextAlign.Center
             )
 
@@ -339,14 +356,14 @@ private fun VocabularyCard(
             )
 
             Text(
-                text = word.targetText,
-                style = MaterialTheme.typography.displayMedium,
-                fontWeight = FontWeight.Bold,
+                text = word.transliteration.orEmpty(),
+                style = MaterialTheme.typography.titleLarge,
+                color = Color(0xFF607189),
                 textAlign = TextAlign.Center
             )
 
-            word.transliteration
-                ?.takeIf { it.isNotBlank() }
+            word.sourceText
+                .takeIf { it.isNotBlank() }
                 ?.let {
                     Spacer(
                         modifier = Modifier.height(10.dp)
@@ -354,8 +371,9 @@ private fun VocabularyCard(
 
                     Text(
                         text = it,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF061E54),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -367,7 +385,7 @@ private fun VocabularyCard(
             Surface(
                 modifier = Modifier.size(64.dp),
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primary
+                color = Color(0xFF08784E)
             ) {
                 IconButton(
                     onClick = onPlayAudio
@@ -376,7 +394,7 @@ private fun VocabularyCard(
                         imageVector = Icons.AutoMirrored.Filled.VolumeUp,
                         contentDescription = "Play pronunciation",
                         modifier = Modifier.size(30.dp),
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = Color.White
                     )
                 }
             }
@@ -388,7 +406,7 @@ private fun VocabularyCard(
             Text(
                 text = "Listen to pronunciation",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color(0xFF5A6B82)
             )
 
             audioError?.let {

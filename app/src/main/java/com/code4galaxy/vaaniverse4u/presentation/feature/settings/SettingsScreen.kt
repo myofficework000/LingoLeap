@@ -172,7 +172,7 @@ private fun SettingsScreen(
                         Text("Delete cloud backup", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         Spacer(Modifier.height(6.dp))
                         Text(
-                            "VaaniVerse4U uses an anonymous Firebase identity to back up learning progress. Delete it here without deleting local lessons or progress.",
+                            "Delete your cloud learning data without deleting local lessons or progress. Guest identities are removed too; signed-in accounts remain available for later use.",
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         cloudBackupStatus?.let { status ->
@@ -253,7 +253,7 @@ private fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { showCloudConfirm = false },
             title = { Text("Delete cloud backup?") },
-            text = { Text("This permanently deletes the anonymous Firebase identity and cloud progress backup. Learning data stored locally on this device will remain.") },
+            text = { Text("This permanently deletes cloud progress and profile data. A guest identity is removed too. If you are signed in, your account stays available but its cloud learning backup is deleted. Local learning data remains on this device.") },
             confirmButton = {
                 TextButton(onClick = {
                     showCloudConfirm = false

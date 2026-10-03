@@ -1,5 +1,6 @@
 package com.code4galaxy.vaaniverse4u.presentation.feature.goal
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -23,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.code4galaxy.vaaniverse4u.domain.usecase.SaveDailyGoalUseCase
+import com.code4galaxy.vaaniverse4u.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,6 +51,12 @@ fun GoalSetupRoute(onFinished: () -> Unit, viewModel: GoalSetupViewModel = hiltV
 @Composable
 private fun GoalSetupScreen(state: GoalSetupState, onSelect: (Int) -> Unit, onContinue: () -> Unit) {
     Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center) {
+        Image(
+            painter = painterResource(R.drawable.tour_goal),
+            contentDescription = null,
+            modifier = Modifier.fillMaxWidth().height(180.dp),
+        )
+        Spacer(Modifier.height(18.dp))
         Text("Set a daily goal", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(10.dp))
         Text("A small, repeatable goal makes the offline course easier to finish.", color = MaterialTheme.colorScheme.onSurfaceVariant)

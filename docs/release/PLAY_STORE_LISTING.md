@@ -24,7 +24,7 @@ VaaniVerse4U helps you make progress every day:
 - Adjustable text size and high-contrast display controls
 - Local learning content that works without a network connection
 
-Your course progress is saved on your device. An anonymous cloud backup can help preserve progress without requiring a sign-up form, and you can delete that backup from Settings at any time.
+Your course progress is saved on your device. Guest cloud backup is available automatically, and you can optionally link it to an Email/Password or Google account to restore progress on another device. You can delete cloud learning data from Settings at any time.
 
 Learn local. Go global.
 
@@ -35,7 +35,7 @@ First public release of VaaniVerse4U.
 - Offline-first Indian language courses and practice
 - Daily goals, progress, review deck, challenges, and achievements
 - Accessible text-size and high-contrast controls
-- Optional anonymous cloud backup with in-app deletion
+- Optional guest, Email/Password, or Google cloud backup with in-app learning-data deletion
 
 ## Asset captions
 

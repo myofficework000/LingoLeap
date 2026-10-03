@@ -1,4 +1,5 @@
 package com.code4galaxy.vaaniverse4u.presentation.feature.home
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,10 +37,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.code4galaxy.vaaniverse4u.R
 
 @Composable
 fun HomeScreen(
@@ -73,7 +79,7 @@ private fun HomeContent(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = Color.Transparent
     ) {
         Column(
             modifier = Modifier
@@ -82,7 +88,7 @@ private fun HomeContent(
                 .padding(horizontal = 20.dp, vertical = 18.dp)
         ) {
 
-            Header(
+            DashboardWelcome(
                 onProfileClick = {
                     onEvent(HomeEvent.Profile)
                 }
@@ -111,6 +117,14 @@ private fun HomeContent(
                     xp = it.xp.toString()
                 )
             }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            DailyGoalCard(
+                completedLessons = completedLessons,
+                totalLessons = totalLessons,
+                onClick = { onEvent(HomeEvent.ContinueLearning) },
+            )
 
             Spacer(modifier = Modifier.height(22.dp))
 
@@ -186,35 +200,59 @@ private fun HomeContent(
 }
 
 @Composable
-private fun Header(
+private fun DashboardWelcome(
     onProfileClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(224.dp)
+            .clip(RoundedCornerShape(28.dp)),
     ) {
+        Image(
+            painter = painterResource(R.drawable.home_dashboard_hero),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.BottomCenter,
+        )
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 22.dp, top = 22.dp)
+                .width(205.dp),
         ) {
             Text(
-                text = "Good evening 👋",
-                style = MaterialTheme.typography.headlineSmall,
+                text = "Namaste! 👋",
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Ready to continue learning?",
+                text = "Ready to learn\na new language\ntoday?",
+                fontSize = 31.sp,
+                lineHeight = 37.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color(0xFF092B52),
+                maxLines = 3,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Small steps. A bigger you.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color(0xFF42576B),
             )
         }
 
         Surface(
-            modifier = Modifier.size(46.dp),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(18.dp)
+                .size(46.dp),
             shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer
+            color = Color(0xDDFFFFFF)
         ) {
             IconButton(
                 onClick = onProfileClick
@@ -222,7 +260,7 @@ private fun Header(
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Profile",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -245,9 +283,24 @@ private fun CourseHeroCard(
         ),
         onClick = onClick
     ) {
-        Column(
-            modifier = Modifier.padding(22.dp)
-        ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Image(
+                painter = painterResource(R.drawable.language_pair_card),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .width(116.dp)
+                    .height(150.dp),
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.BottomEnd,
+            )
+            // Keep all actionable copy in its own lane. The illustration is
+            // decorative and must never sit underneath the course details.
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .padding(end = 112.dp)
+            ) {
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -287,7 +340,8 @@ private fun CourseHeroCard(
                         text = course.title,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        maxLines = 2,
                     )
                 }
 
@@ -311,7 +365,7 @@ private fun CourseHeroCard(
                 )
 
                 Text(
-                    text = "$completedLessons of $totalLessons lessons",
+                    text = "$completedLessons/$totalLessons",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -341,6 +395,48 @@ private fun CourseHeroCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
+        }
+        }
+    }
+}
+
+@Composable
+private fun DailyGoalCard(
+    completedLessons: Int,
+    totalLessons: Int,
+    onClick: () -> Unit,
+) {
+    val goal = totalLessons.coerceAtLeast(1)
+    val progress = (completedLessons.toFloat() / goal).coerceIn(0f, 1f)
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFE9F7EA)),
+        onClick = onClick,
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Surface(modifier = Modifier.size(50.dp), shape = CircleShape, color = Color.White) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.TrackChanges, contentDescription = null, tint = Color(0xFF08784E))
+                }
+            }
+            Spacer(Modifier.width(14.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Daily Goal", style = MaterialTheme.typography.labelLarge, color = Color(0xFF08784E))
+                Text("Build your learning habit", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(7.dp))
+                LinearProgressIndicator(
+                    progress = { progress },
+                    modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(99.dp)),
+                    color = Color(0xFF58BE6F),
+                    trackColor = Color(0xFFCBE5CE),
+                )
+            }
+            Spacer(Modifier.width(10.dp))
+            Text("$completedLessons/$goal", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,6 +30,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +42,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,6 +51,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.code4galaxy.vaaniverse4u.domain.model.LearningPathNode
 import com.code4galaxy.vaaniverse4u.domain.model.LearningPathNodeState
+import com.code4galaxy.vaaniverse4u.R
 
 
 @Composable
@@ -129,6 +134,14 @@ fun LearningPathContent(
             0f
         }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(R.drawable.learning_path_scene),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.BottomCenter,
+        )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -138,49 +151,45 @@ fun LearningPathContent(
             )
     ) {
 
-        Text(
-            text = "Learning Path",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
-        )
+        Surface(
+            shape = RoundedCornerShape(22.dp),
+            color = Color(0xEFFFFFFF),
+        ) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+                Text(
+                    text = "Your learning journey",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF092B52),
+                )
 
         Spacer(
             modifier = Modifier.height(8.dp)
         )
 
-        Text(
-            text = "$completedCount of $totalCount lessons completed",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+                Text(
+                    text = "$completedCount of $totalCount lessons completed",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF496060)
+                )
 
-        Spacer(
-            modifier = Modifier.height(10.dp)
-        )
+                Spacer(modifier = Modifier.height(10.dp))
 
-        LinearProgressIndicator(
-            progress = {
-                progress.coerceIn(0f, 1f)
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(
-            modifier = Modifier.height(8.dp)
-        )
-
-        Text(
-            text = "Complete lessons to unlock the next step.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+                LinearProgressIndicator(
+                    progress = { progress.coerceIn(0f, 1f) },
+                    modifier = Modifier.fillMaxWidth().height(8.dp),
+                    color = Color(0xFF179A54),
+                    trackColor = Color(0xFFE0EAE0),
+                )
+            }
+        }
 
         Spacer(
             modifier = Modifier.height(24.dp)
         )
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.weight(1f)
         ) {
 
             itemsIndexed(
@@ -198,6 +207,7 @@ fun LearningPathContent(
                 )
             }
         }
+    }
     }
 }
 

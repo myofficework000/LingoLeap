@@ -1,6 +1,5 @@
 package com.code4galaxy.vaaniverse4u.presentation.feature.onboarding
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -51,21 +50,24 @@ sealed interface OnboardingEvent : UiEvent {
 data class OnboardingPageUi(
     val title: String,
     val subtitle: String,
-
+    val sceneRes: Int,
 )
 
 private val onboardingPages = listOf(
     OnboardingPageUi(
         title = "Welcome to VaaniVerse4U",
-        subtitle = "Learn local languages in a fun and simple way."
+        subtitle = "Learn local languages in a fun and simple way.",
+        sceneRes = R.drawable.tour_welcome,
     ),
     OnboardingPageUi(
         title = "Learn with Quizzes and Games",
-        subtitle = "Build real skills using lessons, practice and challenges."
+        subtitle = "Build real skills using lessons, practice and challenges.",
+        sceneRes = R.drawable.tour_practice,
     ),
     OnboardingPageUi(
         title = "Track Your Progress",
-        subtitle = "Stay consistent and grow every day with progress tracking."
+        subtitle = "Stay consistent and grow every day with progress tracking.",
+        sceneRes = R.drawable.tour_progress,
     )
 )
 
@@ -112,11 +114,14 @@ fun OnboardingScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-//        Image(
-//            painter = painterResource(id = currentPage.imageRes),
-//            contentDescription = null,
-//            modifier = Modifier.size(220.dp)
-//        )
+        Image(
+            painter = painterResource(id = currentPage.sceneRes),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(240.dp)
+                .clip(RoundedCornerShape(28.dp)),
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 

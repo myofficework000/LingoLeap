@@ -16,6 +16,9 @@ VaaniVerse4U is an offline-first Android app for learning Indian languages throu
 - Local settings let a learner reset progress without changing the chosen language.
 - Profile Help & Support provides offline guidance; Restart setup returns safely to onboarding without a Firebase account.
 - Material 3 light/dark themes with centralised primary, secondary, progress, surface, and error colour tokens.
+- Responsive navigation: phone bottom bar, tablet navigation rail, and large-tablet navigation drawer with restored top-level state.
+- SVG-source scenic background artwork, rendered with local VectorDrawables so the learning flow remains offline-first and lightweight.
+- Android text-to-speech pronunciation with a thread-safe, DI-provided audio boundary; media playback can be added later without changing learner screens.
 
 ## Learner journey
 
@@ -82,12 +85,12 @@ jq empty app/src/main/assets/achievements.json
 
 Firebase is configured on the Spark (no-cost) plan for project `lingoleap-75612`.
 
-- Anonymous Authentication gives each installation a user identity without an account form.
+- Anonymous Authentication gives each installation a guest identity without an account form; users can optionally link it to an Email/Password or Google account from **Profile → Account & cloud backup**.
 - Cloud Firestore stores an encrypted-in-transit backup at `users/{uid}/courses/{courseId}`.
-- Firestore rules allow an authenticated user to access only their own `users/{uid}` document tree; all other documents are denied.
-- The app starts anonymous sign-in automatically and backs up local lesson progress, XP, streaks, completed challenges, and review words in the background.
+- Firestore rules allow an authenticated user to access only their own `users/{uid}` document tree; all other documents are denied. The deployed rules are versioned in [`firestore.rules`](firestore.rules).
+- The app starts guest sign-in automatically and backs up local lesson progress, XP, streaks, completed challenges, and review words in the background. A linked account safely restores that backup on another device.
 
-Local JSON and Room remain the source of truth, so learning still works if Firebase or the network is unavailable. A later account-linking screen can convert anonymous users to Google or email sign-in for cross-device recovery.
+Local JSON and Room remain the source of truth, so learning still works if Firebase or the network is unavailable. Cloud sign-in is optional; it exists only to protect and restore learning progress across devices.
 
 `app/google-services.json` is intentionally ignored by Git. It has been added to this local workspace; a new checkout should download the matching Android configuration file for `com.code4galaxy.vaaniverse4u` from Firebase Console → Project settings → Your apps, then place it in `app/`.
 

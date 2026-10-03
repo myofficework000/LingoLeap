@@ -27,6 +27,7 @@ object StorageModule {
         Room.databaseBuilder(context, VaaniVerse4UDatabase::class.java, "vaaniverse4u.db")
             .addMigrations(VaaniVerse4UDatabase.MIGRATION_1_2)
             .addMigrations(VaaniVerse4UDatabase.MIGRATION_2_3)
+            .addMigrations(VaaniVerse4UDatabase.MIGRATION_3_4)
             .build()
 
     @Provides fun provideProgressDao(database: VaaniVerse4UDatabase): ProgressDao = database.progressDao()

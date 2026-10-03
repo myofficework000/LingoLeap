@@ -62,6 +62,10 @@ class ProfileViewModel @Inject constructor(
                 )
             }
 
+            ProfileEvent.OpenAccount -> {
+                sendEffect(ProfileEffect.NavigateToAccount)
+            }
+
             ProfileEvent.SignOut -> {
                 viewModelScope.launch {
                     clearUserPreferences()

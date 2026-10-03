@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" fill="none">
+  <!-- Source sprite for the regional course-card landmark system. Runtime copies are Android VectorDrawables. -->
+  <defs>
+    <g id="hindi-taj"><path d="M115 145v-42h12V84h13c4-19 13-29 20-34 7 5 16 15 20 34h13v19h12v42zM146 84a14 14 0 1 0 28 0M133 105h54v40h-54z"/></g>
+    <g id="kannada-vidhana"><path d="M82 145v-18h10v-23h15V85h14c3-18 14-31 39-40 25 9 36 22 39 40h14v19h15v23h10v18zM105 123h110v22H105z"/></g>
+    <g id="telugu-charminar"><path d="M115 145v-43h8V74l11-10V39h9v25l17-12 17 12V39h9v25l11 10v28h8v43h-20v-32h-40v32z"/></g>
+    <g id="tamil-meenakshi"><path d="M130 145V70l7-22 6 22 5-35 7 35 5-45 6 45 6-35 5 35 7-22 6 22v75zM119 145V97h12v48zm70 0V97h12v48z"/></g>
+    <g id="malayalam-houseboat"><path d="M92 144c23-24 63-28 107-9l20 9c-23 19-95 25-127 0zm23-9v-30h63v36zm6-30c8-16 16-23 26-23 10 0 18 7 25 23z"/></g>
+    <g id="marathi-fort"><path d="M103 145V96h15V75h18V55h49v20h18v21h15v49h-20v-29h-75v29zM138 93V71h44v22z"/></g>
+    <g id="bengali-howrah"><path d="M48 145v-19h18l25-35 22 35h93l22-35 25 35h18v19h-14l-32-42-20 27h-81l-20-27-32 42z"/></g>
+    <g id="gujarati-stepwell"><path d="M96 145v-11h12v-11h12v-11h12v-11h12V90h32v11h12v11h12v11h12v11h12v11z"/></g>
+    <g id="punjabi-golden-temple"><path d="M101 145v-34h12V90h13V74h12c2-18 12-30 22-36 11 6 20 18 22 36h12v16h13v21h12v34z"/></g>
+    <g id="urdu-jama-masjid"><path d="M98 145v-38h14V67h12V50h8v17h12c3-18 10-28 16-33 6 5 13 15 16 33h12V50h8v17h12v40h14v38z"/></g>
+    <g id="odia-konark"><circle cx="160" cy="105" r="38"/><circle cx="160" cy="105" r="25"/><path d="M156 67h8v76h-8zm-34 34h76v8h-76z"/></g>
+    <g id="assamese-rhino"><path d="M92 139c3-22 17-34 46-34h43c17 2 28 12 35 28l18 5v8h-38c-5 10-16 15-34 15h-37c-16 0-27-6-33-15H73v-7z"/></g>
+    <g id="nepali-pagoda"><path d="M139 145v-41h12V81h9V64h10v17h9v23h12v41zM154 64l6-19 6 19z"/></g>
+    <g id="sanskrit-temple"><path d="M122 145v-41h10V77h10V57h10l8-28 8 28h10v20h10v27h10v41zM152 57h16l-8-20z"/></g>
+  </defs>
+  <rect width="320" height="180" fill="#FFFDF7"/>
+  <text x="20" y="36" fill="#053E38" font-family="sans-serif" font-size="18" font-weight="700">Regional landmark source sprite</text>
+</svg>

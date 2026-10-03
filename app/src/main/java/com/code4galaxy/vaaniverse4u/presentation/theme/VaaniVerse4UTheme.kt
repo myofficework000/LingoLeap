@@ -6,7 +6,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 
@@ -96,7 +95,10 @@ private val HighContrastDarkColors = darkColorScheme(
 
 @Composable
 fun VaaniVerse4UTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    // The illustrated product surfaces are intentionally light. Dark system mode previously
+    // inverted Material foreground tokens over those fixed light cards, reducing contrast.
+    // A future user-selected dark palette can opt in explicitly through this parameter.
+    darkTheme: Boolean = false,
     highContrast: Boolean = false,
     content: @Composable () -> Unit,
 ) = MaterialTheme(

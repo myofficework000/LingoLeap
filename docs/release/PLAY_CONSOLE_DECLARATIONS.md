@@ -4,7 +4,7 @@ This document records the declarations supported by the current source code. The
 
 ## App access
 
-The app has no visible sign-in wall, paid wall, or restricted area. Select **All functionality is available without special access**. Firebase Authentication is anonymous and happens in the background; it does not require tester credentials.
+The app has no visible sign-in wall, paid wall, or restricted area. Select **All functionality is available without special access**. Guest learning works without credentials; Email/Password and Google sign-in are optional cloud-backup features, so tester credentials are not required.
 
 ## Ads
 
@@ -20,7 +20,7 @@ Recommended initial declaration: **not designed for children** and **not enrolle
 
 ## Data safety
 
-Use [DATA_SAFETY_DECLARATION.md](DATA_SAFETY_DECLARATION.md). The cloud backup creates an anonymous Firebase user ID and stores learning progress, so “we collect no data” would be inaccurate.
+Use [DATA_SAFETY_DECLARATION.md](DATA_SAFETY_DECLARATION.md). The cloud backup stores Firebase user IDs and learning progress; optional account creation additionally processes a name and email address, so “we collect no data” would be inaccurate.
 
 ## Permissions and device access
 

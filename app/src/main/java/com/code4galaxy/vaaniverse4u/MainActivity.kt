@@ -4,10 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
@@ -16,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.code4galaxy.vaaniverse4u.presentation.feature.home.HomeEvent
 import com.code4galaxy.vaaniverse4u.presentation.feature.home.HomeScreen
+import com.code4galaxy.vaaniverse4u.presentation.feature.account.AccountRoute
 import com.code4galaxy.vaaniverse4u.presentation.feature.challenge.DailyChallengeRoute
 import com.code4galaxy.vaaniverse4u.presentation.feature.goal.GoalSetupRoute
 import com.code4galaxy.vaaniverse4u.presentation.feature.course.CourseOverviewRoute
@@ -39,7 +41,8 @@ import com.code4galaxy.vaaniverse4u.presentation.feature.progress.ProgressEffect
 import com.code4galaxy.vaaniverse4u.presentation.feature.progress.ProgressScreen
 import com.code4galaxy.vaaniverse4u.presentation.feature.progress.ProgressViewModel
 import com.code4galaxy.vaaniverse4u.presentation.feature.quiz.QuizRoute
-import com.code4galaxy.vaaniverse4u.presentation.navigation.LingoBottomBar
+import com.code4galaxy.vaaniverse4u.presentation.design.VaaniScreenBackground
+import com.code4galaxy.vaaniverse4u.presentation.navigation.LingoAdaptiveNavigation
 import com.code4galaxy.vaaniverse4u.presentation.navigation.LingoRoute
 import com.code4galaxy.vaaniverse4u.presentation.accessibility.AppAccessibilityViewModel
 import com.code4galaxy.vaaniverse4u.presentation.theme.VaaniVerse4UTheme
@@ -63,11 +66,19 @@ private fun VaaniVerse4UApp() {
     val showBottomBar = currentRoute in setOf(
         LingoRoute.Home.path, LingoRoute.Lessons.path, LingoRoute.PracticeHub.path, LingoRoute.Profile.path,
     )
+    // Scaffold already supplies system-bar content insets for bottom-navigation routes.
+    // Applying an additional status-bar inset there created the large empty gap above Home.
+    val screenSafeArea = if (showBottomBar) Modifier else Modifier.safeDrawingPadding()
 
     VaaniVerse4UTheme(highContrast = accessibilityState.highContrastEnabled) {
         VaaniVerse4UTextScale(scale = accessibilityState.textScale) {
-            Scaffold(bottomBar = { if (showBottomBar) LingoBottomBar(navController) }) { padding ->
-                NavHost(navController, LingoRoute.Splash.path, androidx.compose.ui.Modifier.padding(padding)) {
+            VaaniScreenBackground {
+                LingoAdaptiveNavigation(navController = navController, showNavigation = showBottomBar) { padding ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = LingoRoute.Splash.path,
+                        modifier = androidx.compose.ui.Modifier.padding(padding).then(screenSafeArea),
+                    ) {
             composable(LingoRoute.Splash.path) {
                 SplashRoute(onNavigate = { route -> navController.navigate(route) { popUpTo(LingoRoute.Splash.path) { inclusive = true } } })
             }
@@ -223,6 +234,7 @@ private fun VaaniVerse4UApp() {
                             ProfileEffect.NavigateToAchievements -> navController.navigate(LingoRoute.Achievements.path)
                             ProfileEffect.NavigateToSettings -> navController.navigate(LingoRoute.Settings.path)
                             ProfileEffect.NavigateToHelpSupport -> navController.navigate(LingoRoute.Help.path)
+                            ProfileEffect.NavigateToAccount -> navController.navigate(LingoRoute.Account.path)
                             ProfileEffect.SignOut -> navController.navigate(LingoRoute.Onboarding.path) { popUpTo(0) { inclusive = true } }
                         }
                     }
@@ -243,6 +255,7 @@ private fun VaaniVerse4UApp() {
             }
 
             composable(LingoRoute.Achievements.path) { AchievementsScreen(onEvent = { navController.popBackStack() }) }
+            composable(LingoRoute.Account.path) { AccountRoute(onBack = { navController.popBackStack() }) }
             composable(LingoRoute.CourseOverview.path) { CourseOverviewRoute(onOpenLessons = { navController.navigate(LingoRoute.Lessons.path) }, onBack = { navController.popBackStack() }) }
             composable(LingoRoute.Review.path) { ReviewRoute(onBack = { navController.popBackStack() }) }
             composable(LingoRoute.Settings.path) { SettingsRoute(onBack = { navController.popBackStack() }) }
@@ -253,6 +266,7 @@ private fun VaaniVerse4UApp() {
                     onFinished = { navController.navigate(LingoRoute.Home.path) { popUpTo(LingoRoute.Home.path) { inclusive = false } } },
                 )
             }
+                    }
                 }
             }
         }

@@ -60,6 +60,9 @@ class LearningRepositoryImpl @Inject constructor(
         progressSource.save(defaultProgress)
         defaultProgress
     }
+    override suspend fun replaceProgress(progress: LearnerProgress) {
+        progressSource.save(progress)
+    }
     override fun observeProgress(): Flow<LearnerProgress> = progressSource.observe().onStart { getProgress() }
     override suspend fun completeLesson(lessonId: String): LearnerProgress {
         val current = getProgress()

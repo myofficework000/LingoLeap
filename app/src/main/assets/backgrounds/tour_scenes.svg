@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" fill="none">
+  <!-- Source artwork for onboarding; Android VectorDrawable counterparts are tour_*.xml. -->
+  <rect width="360" height="240" rx="28" fill="#FFF7E5"/>
+  <circle cx="277" cy="67" r="31" fill="#F8C95D"/>
+  <path d="M0 171c62-48 127-42 188 2 53-37 109-31 172-1v68H0v-69Z" fill="#BFE1B9"/>
+  <path d="M0 205c81-29 149-18 225 8 43-21 88-16 135-4v31H0v-35Z" fill="#4C9A62"/>
+  <path d="M150 211v-65l23-31 23 31v65h-46Zm10 0v-46h26v46h-26Z" fill="#D48D4D"/>
+</svg>

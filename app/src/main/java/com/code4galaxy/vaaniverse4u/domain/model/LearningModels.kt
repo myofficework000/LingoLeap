@@ -36,7 +36,9 @@ data class Quiz(
     val lessonId: String,
     val prompt: String,
     val choices: List<String>,
-    val correctAnswer: String
+    val correctAnswer: String,
+    val pronunciationText: String,
+    val pronunciationLanguageTag: String,
 )
 
 data class DailyChallenge(

@@ -6,11 +6,11 @@ Use this as the source of truth when completing **Play Console → App content �
 
 | Play Console question | Declaration for VaaniVerse4U 1.0.0 |
 | --- | --- |
-| Does the app collect or share user data? | **Yes, collects. No, does not share for third-party advertising.** Firebase Authentication and Firestore receive the anonymous installation ID and learning backup. |
-| Personal info | **User IDs**: anonymous Firebase UID. Collected for app functionality; transmitted to Firebase; not shared. |
+| Does the app collect or share user data? | **Yes, collects. No, does not share for third-party advertising.** Firebase Authentication and Firestore receive a guest or linked-account user ID and learning backup. |
+| Personal info | **Name and email address**: collected only when a user chooses Email/Password or Google sign-in, for account functionality; transmitted to Firebase; not shared. **User IDs**: Firebase UID for guest and linked accounts, collected for app functionality; transmitted to Firebase; not shared. |
 | App activity | **App interactions**: selected course plus completed lessons/challenges/review words, XP, and streak. Collected for app functionality; transmitted to Firebase; not shared. |
 | Data encrypted in transit? | **Yes.** Firebase uses TLS for network traffic. |
-| Can users request deletion? | **Yes.** In app: Settings → Delete cloud backup. Support route: `[SUPPORT_EMAIL]`. |
+| Can users request deletion? | **Yes.** In app: Settings → Delete cloud backup removes cloud learning data (and guest identity where applicable). Linked-account deletion requests: `code4galaxy@gmail.com`. |
 | Is data required to use the app? | **No.** Core learning content and progress work offline. Cloud backup is an auxiliary function. |
 | Sold or used for advertising/marketing? | **No.** |
 | Other data categories | **No** for location, contacts, photos/videos, audio recordings, financial info, health/fitness, messages, browsing history, diagnostics, and device identifiers other than the Firebase user ID above. |

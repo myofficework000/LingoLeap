@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.code4galaxy.vaaniverse4u.domain.usecase.GetLessonQuizUseCase
 import com.code4galaxy.vaaniverse4u.domain.usecase.AddReviewWordUseCase
+import com.code4galaxy.vaaniverse4u.domain.audio.PronunciationPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class QuizViewModel @Inject constructor(
     private val getLessonQuizUseCase: GetLessonQuizUseCase,
     private val addReviewWord: AddReviewWordUseCase,
+    private val pronunciationPlayer: PronunciationPlayer,
 ) : ViewModel() {
 
     private val _quizState =
@@ -64,6 +66,8 @@ class QuizViewModel @Inject constructor(
             QuizEvent.Next -> {
                 moveToNextQuestion()
             }
+
+            QuizEvent.PlayAudio -> playAudio()
         }
     }
 
@@ -134,5 +138,15 @@ class QuizViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun playAudio() = viewModelScope.launch {
+        val quiz = _quizState.value.quizzes.getOrNull(_quizState.value.currentQuestionIndex) ?: return@launch
+        pronunciationPlayer.play(quiz.pronunciationText, quiz.pronunciationLanguageTag)
+    }
+
+    override fun onCleared() {
+        pronunciationPlayer.release()
+        super.onCleared()
     }
 }

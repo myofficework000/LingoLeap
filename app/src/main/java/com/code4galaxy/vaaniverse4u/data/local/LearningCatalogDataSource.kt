@@ -127,17 +127,36 @@ private fun Lesson.toQuizzes(): List<Quiz> {
         return emptyList()
     }
 
-    return words.mapIndexed { index, word ->
-
+    val targetChoices = words.map { it.targetText }
+    val sourceChoices = words.map { it.sourceText }
+    val forwardQuestions = words.mapIndexed { index, word ->
         Quiz(
-            id = "quiz-$id-${index + 1}",
-            lessonId = id,
-            prompt =
-                "Choose the correct meaning of ${word.sourceText}",
-            choices = words
-                .map { it.targetText }
-                .let { answers -> answers.drop(index) + answers.take(index) },
-            correctAnswer = word.targetText
+            id = "quiz-$id-meaning-${index + 1}", lessonId = id,
+            prompt = "What does ${word.sourceText} mean?",
+            choices = rotateChoices(targetChoices, index), correctAnswer = word.targetText,
+            pronunciationText = word.targetText, pronunciationLanguageTag = pronunciationLanguageTag,
         )
     }
+    val reverseQuestions = words.mapIndexed { index, word ->
+        Quiz(
+            id = "quiz-$id-match-${index + 1}", lessonId = id,
+            prompt = "Choose the matching word for ${word.targetText}",
+            choices = rotateChoices(sourceChoices, index), correctAnswer = word.sourceText,
+            pronunciationText = word.targetText, pronunciationLanguageTag = pronunciationLanguageTag,
+        )
+    }
+    // Listening questions make every lesson a ten-question checkpoint even when
+    // the beginner lesson has four core vocabulary words.
+    val listeningQuestions = words.take(2).mapIndexed { index, word ->
+        Quiz(
+            id = "quiz-$id-listen-${index + 1}", lessonId = id,
+            prompt = "Listen and choose the word you hear.",
+            choices = rotateChoices(targetChoices, index + 1), correctAnswer = word.targetText,
+            pronunciationText = word.targetText, pronunciationLanguageTag = pronunciationLanguageTag,
+        )
+    }
+    return forwardQuestions + reverseQuestions + listeningQuestions
 }
+
+private fun rotateChoices(choices: List<String>, correctIndex: Int): List<String> =
+    choices.drop(correctIndex) + choices.take(correctIndex)

@@ -19,6 +19,8 @@ interface LearningRepository {
     suspend fun setActiveLanguagePair(languagePairId: String): LearnerProgress
     suspend fun completeDailyChallenge(challengeId: String): LearnerProgress
     suspend fun getProgress(): LearnerProgress
+    /** Replaces local progress only after an authenticated cloud account is restored. */
+    suspend fun replaceProgress(progress: LearnerProgress)
     fun observeProgress(): Flow<LearnerProgress>
     suspend fun completeLesson(lessonId: String): LearnerProgress
     suspend fun addReviewWord(wordId: String): LearnerProgress
